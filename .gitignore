@@ -196,3 +196,7 @@ Lib/Sqlite3/sqlite3.h
 Lib/Sqlite3/sqlite3.lib
 Lib/Sqlite3/sqlite3ext.h
 
+*.db-wal
+*.db-shm
+*.opendb
+*.def
