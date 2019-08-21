@@ -1,0 +1,16 @@
+﻿  ComServUser.cpp
+  GestionBdd.cpp
+  GestPersoGen.cpp
+  ObjectFile.cpp
+  PersoJson.cpp
+  main.cpp
+  enchant.cpp
+  item.cpp
+  sac.cpp
+D:\Project-Jeu\Serveur_User\Serveur_User\src\Gestion\GestPersoGen.cpp(122,19): warning C4018:  '<' : incompatibilité signed/unsigned
+  stuff.cpp
+  perso.cpp
+  Stat.cpp
+  Génération de code en cours...
+D:\Project-Jeu\Serveur_User\Serveur_User\src\Serv_Item\sac.cpp(25,20): warning C4018:  '<' : incompatibilité signed/unsigned
+  Serveur_User.vcxproj -> D:\Project-Jeu\Debug\Serveur_User.exe

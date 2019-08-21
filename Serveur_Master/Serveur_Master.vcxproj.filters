@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Réseau">
+      <UniqueIdentifier>{13b983e0-1b14-48ad-96a1-be422b3a2183}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Réseau\Source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Réseau\Header">
+      <UniqueIdentifier>{5b1b51b0-5171-449e-868a-791b3d39f7a8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Serveur_Master\src\main.cpp" />
+    <ClCompile Include="Serveur_Master\src\CSR\ComServMast.cpp">
+      <Filter>Réseau\Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Serveur_Master\include\CSR\ComServMast.h">
+      <Filter>Réseau\Header</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Client\src\Personnage\perso.cpp">
+      <Filter>Personnage\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\src\Personnage\Stat.cpp">
+      <Filter>Personnage\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\src\Reseau\clientToServ.cpp">
+      <Filter>Réseau\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\src\Reseau\servToClient.cpp">
+      <Filter>Réseau\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\src\Menu\menuCompte.cpp">
+      <Filter>Menu\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\src\Menu\menuMain.cpp">
+      <Filter>Menu\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\src\Item\enchant.cpp">
+      <Filter>Item\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\src\Item\item.cpp">
+      <Filter>Item\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\src\Item\sac.cpp">
+      <Filter>Item\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\src\Item\stuff.cpp">
+      <Filter>Item\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\src\Bouton\Bouton.cpp">
+      <Filter>Bouton\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\src\Bouton\BoutonKey.cpp">
+      <Filter>Bouton\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\src\Bouton\BoutonKeyEmail.cpp">
+      <Filter>Bouton\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\src\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Bouton">
+      <UniqueIdentifier>{f91cdda7-693b-4013-8b92-8c7e2fcab4a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Bouton\Source">
+      <UniqueIdentifier>{4675543d-305d-4c55-9788-8b1a1a778e8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Bouton\Include">
+      <UniqueIdentifier>{e5b9b8e3-54b6-46d2-8823-e8b079493a0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Item">
+      <UniqueIdentifier>{c4cd945d-b7f8-4c1a-96b4-583586e371e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Item\Include">
+      <UniqueIdentifier>{65e77ffe-07fc-4d8c-821f-b952fe940a5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Item\Source">
+      <UniqueIdentifier>{067a11e6-ccf4-4390-b4ba-d299748b1c60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Menu">
+      <UniqueIdentifier>{fbfd2dd2-ad32-4cdc-a856-ba50cfdc2615}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Menu\Include">
+      <UniqueIdentifier>{44c98d0c-0ecc-40ec-913c-59192ae41dbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Menu\Source">
+      <UniqueIdentifier>{917e5669-b427-4a8f-a7e0-4a25796fdc14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Personnage">
+      <UniqueIdentifier>{2d017ece-9aa3-4bb3-859a-f81cd79fa307}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Personnage\Include">
+      <UniqueIdentifier>{3a657f59-556d-4a82-8167-191eb778bd4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Personnage\Source">
+      <UniqueIdentifier>{47cfde0a-7bf4-41a6-b492-8973b264228b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Réseau">
+      <UniqueIdentifier>{c94ba0e0-4aee-4de2-8bb1-36a56d8851ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Réseau\Include">
+      <UniqueIdentifier>{9916eff2-0883-4e5f-ae5c-bf43ff36aa47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Réseau\Source">
+      <UniqueIdentifier>{4c19d566-9a98-47e6-af8a-c92b5a18bb1b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Client\include\Personnage\perso.h">
+      <Filter>Personnage\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\include\Personnage\Stat.h">
+      <Filter>Personnage\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\include\Bouton\Bouton.h">
+      <Filter>Bouton\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\include\Bouton\BoutonKey.h">
+      <Filter>Bouton\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\include\Bouton\BoutonKeyEmail.h">
+      <Filter>Bouton\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\include\Item\enchant.h">
+      <Filter>Item\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\include\Item\item.h">
+      <Filter>Item\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\include\Item\sac.h">
+      <Filter>Item\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\include\Item\stuff.h">
+      <Filter>Item\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\include\Menu\menuCompte.h">
+      <Filter>Menu\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\include\Menu\menuMain.h">
+      <Filter>Menu\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\include\Reseau\clientToServ.h">
+      <Filter>Réseau\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\include\Reseau\servToClient.h">
+      <Filter>Réseau\Include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Client\include\Item\sac.inl">
+      <Filter>Item\Include</Filter>
+    </None>
+    <None Include="Client\include\Personnage\perso.inl">
+      <Filter>Personnage\Include</Filter>
+    </None>
+  </ItemGroup>
+</Project>

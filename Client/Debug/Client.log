@@ -1,0 +1,27 @@
+﻿  Bouton.cpp
+  BoutonKey.cpp
+  BoutonKeyEmail.cpp
+D:\Project-Jeu\Client\Client\src\Bouton\BoutonKey.cpp(72,25): warning C4018:  '<' : incompatibilité signed/unsigned
+  enchant.cpp
+  item.cpp
+  sac.cpp
+D:\Project-Jeu\Client\Client\src\Bouton\BoutonKeyEmail.cpp(13,25): warning C4018:  '<' : incompatibilité signed/unsigned
+  stuff.cpp
+  main.cpp
+  menuCompte.cpp
+D:\Project-Jeu\Client\Client\src\Item\sac.cpp(25,20): warning C4018:  '<' : incompatibilité signed/unsigned
+D:\Project-Jeu\Client\Client\src\Menu\menuCompte.cpp(33,37): warning C4267:  'initialisation' : conversion de 'size_t' en 'short', perte possible de données
+D:\Project-Jeu\Client\Client\src\Menu\menuCompte.cpp(37,38): warning C4244:  'argument' : conversion de 'double' en 'float', perte possible de données
+D:\Project-Jeu\Client\Client\src\Menu\menuCompte.cpp(40,74): warning C4244:  'argument' : conversion de 'double' en 'T', perte possible de données
+D:\Project-Jeu\Client\Client\src\Menu\menuCompte.cpp(40,74): warning C4244:         with
+D:\Project-Jeu\Client\Client\src\Menu\menuCompte.cpp(40,74): warning C4244:         [
+D:\Project-Jeu\Client\Client\src\Menu\menuCompte.cpp(40,74): warning C4244:             T=float
+D:\Project-Jeu\Client\Client\src\Menu\menuCompte.cpp(40,74): warning C4244:         ]
+  menuMain.cpp
+  perso.cpp
+  Stat.cpp
+  clientToServ.cpp
+  servToClient.cpp
+  Génération de code en cours...
+D:\Project-Jeu\Client\Client\src\Menu\menuCompte.cpp(187,3): warning C4065:  l'instruction switch contient 'default' mais aucune étiquette 'case'
+  Client.vcxproj -> D:\Project-Jeu\Debug\Client.exe
