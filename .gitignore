@@ -200,3 +200,5 @@ Lib/Sqlite3/sqlite3ext.h
 *.db-shm
 *.opendb
 *.def
+Serveur_Master/bin/Debug/Serveur_Master.exe
+*.exe
