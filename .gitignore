@@ -202,3 +202,5 @@ Lib/Sqlite3/sqlite3ext.h
 *.def
 Serveur_Master/bin/Debug/Serveur_Master.exe
 *.exe
+Client/Debug/stat.obj.enc
+Serveur_User/Debug/stuff.new.obj.enc

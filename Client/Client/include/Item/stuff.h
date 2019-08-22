@@ -38,7 +38,7 @@ private:
 	void getEnchantStat(std::vector<int>& stat);
 	void initSprite();
 	PIECE m_piece;
-	short m_maxSlot, m_nbEnchant;
+	short m_maxSlot;
 	statistic m_stat;
 	std::vector<enchant> m_enchant;
 	int m_lvlMin;

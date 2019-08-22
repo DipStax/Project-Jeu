@@ -22,6 +22,7 @@ sf::Packet& operator<<(sf::Packet& packet, statistic& stat) {
 	stat.getStat(vec);
 	for (auto& stat_ : vec) {
 		packet << stat_;
+		std::cout << stat_ << " : " << std::endl;
 	}
 	return packet;
 }
@@ -32,7 +33,7 @@ sf::Packet& operator>>(sf::Packet& packet, statistic& stat) {
 	for (int i = 0; i < 9; i++) {
 		packet >> stat_;
 		val = static_cast<ValType>(i);
-		stat.setStat(stat_, val);
+		stat.setStat(stat_ / 65536, val);
 	}
 	return packet;
 }

@@ -37,7 +37,7 @@ private:
 	void write();
 	void getEnchantStat(std::vector<int>& stat);
 	PIECE m_piece;
-	short m_maxSlot, m_nbEnchant;
+	short m_maxSlot;
 	statistic m_stat;
 	std::vector<enchant> m_enchant;
 	int m_lvlMin;
