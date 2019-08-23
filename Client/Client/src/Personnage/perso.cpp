@@ -18,6 +18,8 @@ Perso::Perso(int ID, std::string pseudo, short map, sf::Vector2f pos, short lvl,
 	m_manaAct = manaAct;
 	m_clrHair = hair;
 	m_clrSkin = skin;
+	m_dir = dir::D;
+	m_step = 0;
 	this->initSprite();
 }
 
@@ -40,6 +42,9 @@ int Perso::getVieAct() const { return m_vieAct; }
 skin::clr Perso::getClrSkin() const { return m_clrSkin; }
 hair::clr Perso::getClrHair() const { return m_clrHair; }
 
+void Perso::setPos(float x, float y) {
+	m_pos = sf::Vector2f(x, y);
+}
 void Perso::changeColor(skin::clr color) {
 	m_clrSkin = color;
 	this->initSprite();
@@ -53,7 +58,7 @@ void Perso::changeColor(hair::clr color) {
 void Perso::forceStuff(stuff equip) {
 	m_stuff.erase(equip.getTypeObj());
 	m_stuff.emplace(std::pair<TypeObj, stuff>(equip.getTypeObj(), equip));
-	this->upSprite();
+	this->setSprite();
 }
 
 bool Perso::equipeStuff(stuff equip) {
@@ -70,7 +75,7 @@ bool Perso::equipeStuff(stuff equip) {
 		return false;
 	}
 	m_sac.at(sac_to_use)->addObject<stuff>(equip);
-	this->upSprite();
+	this->setSprite();
 	return true;
 
 	// TODO FINIR LA FONCTION 
@@ -91,12 +96,10 @@ void Perso::sacInPacket(sf::Packet& packet) {
 }
 
 void Perso::draw(sf::RenderWindow& screen) {
-	this->upSprite();
 	screen.draw(m_sptMain);
 }
 
 void Perso::rdTxtrDraw(sf::RenderTexture& rdTxtr) {
-	this->upSprite();
 	rdTxtr.draw(m_sptMain);
 }
 
@@ -159,7 +162,6 @@ void Perso::sacOutPacket(sf::Packet& packet) {
 }
 
 void Perso::initSprite() {
-	std::cout << "Loading texture and sprite for color skin and hair" << std::endl;
 	std::string path;
 	switch (m_clrSkin) {
 	case skin::clr::Blanc:
@@ -184,19 +186,25 @@ void Perso::initSprite() {
 	}
 	m_sptPerso.setTexture(m_txtrPerso);
 	// TODO same thing but for hair
-	this->upSprite();
+	this->setSprite();
 }
 
-void Perso::upSprite() {
+void Perso::setSprite() {
 	sf::RenderTexture rdTxtr;
 	if (!(rdTxtr.create(600, 600)))
-		std::cout << "Error create renderTexture" << std::endl;
-	rdTxtr.clear(sf::Color::Red);
+		std::cout << "Error create renderTexture" << std::endl;		
 	rdTxtr.draw(m_sptPerso);
 	for (auto& stuff_ : m_stuff) {
-		stuff_.second.rdTxtrDraw(rdTxtr);
+		sf::Sprite spt_tmp(stuff_.second.getTxtr());
+		rdTxtr.draw(spt_tmp);
 	}
 	rdTxtr.display();
 	m_txtrMain = rdTxtr.getTexture();
 	m_sptMain.setTexture(m_txtrMain);
+	this->upSprite();
+}
+
+void Perso::upSprite() {
+	m_sptMain.setTextureRect(sf::IntRect(m_step * 64, m_dir * 64, 64, 64));
+	m_sptMain.setPosition(m_pos);
 }

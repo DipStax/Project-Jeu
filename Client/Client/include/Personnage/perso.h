@@ -15,7 +15,7 @@
 #include <iomanip>
 
 enum TYPEPERSO { TANK, EPEE, MAGE, PERSO };
-enum dir { U, D, R, L, UR, RL, DU, DL };
+enum dir { D, U, R, L, UR, RL, DU, DL };
 namespace skin {
 	enum clr { Blanc, MaronC, MaronF, Beige, Rose, Jaune };
 }
@@ -48,6 +48,8 @@ public:
 	skin::clr getClrSkin() const;
 	hair::clr getClrHair() const;
 
+	void setPos(float x, float y);
+
 	void changeColor(skin::clr color);
 	void changeColor(hair::clr color);
 
@@ -67,6 +69,7 @@ public:
 protected:
 	void write();
 	void initSprite();
+	void setSprite();
 	void upSprite();
 	std::string m_pseudo;
 	short m_lvl, m_NumSprite, m_mapAct;
@@ -77,7 +80,7 @@ protected:
 	int m_manaMax, m_vieMax;
 	int m_expAct, m_expNextLvl;
 	int m_ID, m_argentBrute;
-	const int8_t m_maxSac = 3;
+	const int m_maxSac = 3;
 	std::map<TypeObj, stuff> m_stuff;
 	std::vector<std::unique_ptr<sac>> m_sac;
 	TYPEPERSO m_type;
@@ -85,11 +88,13 @@ protected:
 	skin::clr m_clrSkin;
 	const short m_maxLvl = 30;
 	// Variable du sprite
-	
 	sf::Texture m_txtrMain;
 	sf::Sprite m_sptMain;
 	sf::Texture m_txtrPerso;
 	sf::Sprite m_sptPerso;
+	dir m_dir;
+	int m_step;
+	const int m_stepMax = 6;
 };
 
 #include <Personnage/perso.inl>

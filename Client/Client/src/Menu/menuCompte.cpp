@@ -17,8 +17,8 @@ namespace mCompte {
 		// 8: selection de la classe pos1
 		// 9: selection de la classe pos2 (useless)
 		// 10: selection de la classe pos3
-		// 0: choix pseudo
-		// 1: retour
+		// 11: choix pseudo
+		// 12: retour
 		// 13...: personnage selectionne
 		if (adrs == 0) {
 			listBtn.clear();
@@ -155,7 +155,7 @@ namespace mCompte {
 				return adrs_tmp;
 			}
 		}
-		return adrs;
+		return 0;
 	}
 
 	sf::Texture genTxtrSelect(std::unique_ptr<Perso>& perso) {
@@ -184,5 +184,6 @@ namespace mCompte {
 			// case 1:
 				// TANK
 		}
+		perso->setPos(50, 50);
 	}
 }

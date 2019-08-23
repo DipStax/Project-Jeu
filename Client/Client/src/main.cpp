@@ -107,6 +107,9 @@ int main() {
 			}
 			else if (mCompte) {
 				adrs_tmp = mCompte::verifEvent(event, adrs, listBtn, listSprite, screen);
+				if (adrs == 1 || adrs == 4) {
+					mCompte::setMenu(listBtn, listPerso, listTxtr, creaPerso, adrs, perso, adrsIP, servSend, servReceive, listener);
+				}
 				mCompte::boutonInput(adrs_tmp, adrs, listSprite, listBtn, creaPerso);
 				// TODO
 				// gestion de la validation
@@ -122,7 +125,8 @@ int main() {
 		for (auto& sprite : listSprite) {
 			screen.draw(sprite);
 		}
-		if (mCompte && adrs == 4 && adrs_tmp != 4) {
+		
+		if (mCompte && adrs == 4) {
 			// affiche quand a une MaJ, event ctach: plus affichage
 			perso->draw(screen);
 		}

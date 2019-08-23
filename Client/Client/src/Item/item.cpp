@@ -14,6 +14,7 @@ item::~item() {}
 int item::getID() {	return m_ID; }
 TypeObj item::getTypeObj() const { return m_typeObj; }
 std::string item::getName() const { return m_name; }
+sf::Texture& item::getTxtr() { return m_txtr; }
 
 void item::setID(int ID) {
 	m_ID = ID;
@@ -43,7 +44,7 @@ void item::inPacket(sf::Packet& packet) {
 void item::rdTxtrDrawIcon(sf::RenderTexture& rdTxtr) {
 	sf::Sprite sprite_c = m_sprite;
 	sprite_c.setScale(sf::Vector2f(16, 16));
-	rdTxtr.draw(sprite_c); // peut etre non-afficher car c'est une reference, a voir
+	rdTxtr.draw(sprite_c);
 }
 
 sf::Packet& operator<<(sf::Packet& packet, item& item_) {

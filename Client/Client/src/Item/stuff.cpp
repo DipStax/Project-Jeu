@@ -53,11 +53,6 @@ void stuff::getEnchantStat(std::vector<int>& stat) {
 
 PIECE stuff::getPiece() { return m_piece; }
 
-void stuff::rdTxtrDraw(sf::RenderTexture& rdTxtr) {
-	rdTxtr.draw(m_sprite);
-	// render a white rect w/o the stuff
-}
-
 void stuff::inPacket(sf::Packet& packet) {
 	packet << (sf::Uint32)m_ID << m_name << static_cast<sf::Uint8>(m_typeObj) << (sf::Uint8)m_maxSlot << static_cast<sf::Uint8>(m_piece) << (sf::Uint8)m_lvlMin
 		   << m_stat << (sf::Uint8)m_enchant.size();
@@ -143,5 +138,6 @@ void stuff::initSprite() {
 		return;
 	}
 	m_sprite.setTexture(m_txtr);
+	m_sprite.setPosition(100, 100);
 	std::cout << "The texture: " << path << " as loaded succesfuly" << std::endl;
 }

@@ -17,6 +17,7 @@ public:
 	int getID();
 	TypeObj getTypeObj() const;
 	std::string getName() const;
+	sf::Texture& getTxtr();
 
 	void setID(int ID);
 	void setTypeObj(TypeObj typeObj);
