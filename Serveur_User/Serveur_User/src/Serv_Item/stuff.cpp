@@ -53,8 +53,8 @@ void stuff::getEnchantStat(std::vector<int>& stat) {
 PIECE stuff::getPiece() { return m_piece; }
 
 void stuff::inPacket(sf::Packet& packet) {
-	packet << m_ID << m_name << static_cast<int>(m_typeObj) << m_maxSlot << static_cast<int>(m_piece) << m_lvlMin 
-		   << m_stat << m_enchant.size();
+	packet << (sf::Uint32)m_ID << m_name << static_cast<sf::Uint8>(m_typeObj) << (sf::Uint8)m_maxSlot << static_cast<sf::Uint8>(m_piece) << (sf::Uint8)m_lvlMin
+		   << m_stat << (sf::Uint8)m_enchant.size();
 	for (auto& enchant_ : m_enchant) {
 		packet << enchant_;
 	}
@@ -63,10 +63,8 @@ void stuff::inPacket(sf::Packet& packet) {
 sf::Packet& operator<<(sf::Packet& packet, stuff& stuff_) {
 	std::cout << "<---------->" << std::endl << "Packet << Stuff" << std::endl;
 	std::cout << stuff_.getID() << std::endl;
-	packet << stuff_.getID() << stuff_.getName() << static_cast<int>(stuff_.getTypeObj()) << stuff_.getMaxSlot()
-		<< static_cast<int>(stuff_.getPiece()) << stuff_.getMinLvl() << stuff_.getStat();
-	packet << stuff_.getNbEnchant();
-
+	packet << (sf::Uint32)stuff_.getID() << stuff_.getName() << static_cast<sf::Uint8>(stuff_.getTypeObj()) << (sf::Uint8)stuff_.getMaxSlot()
+		<< static_cast<sf::Uint8>(stuff_.getPiece()) << (sf::Uint8)stuff_.getMinLvl() << stuff_.getStat() << (sf::Uint8)stuff_.getNbEnchant();
 	for (auto& enchant_ : stuff_.getEnchant()) {
 		packet << enchant_;
 	}
@@ -76,7 +74,8 @@ sf::Packet& operator<<(sf::Packet& packet, stuff& stuff_) {
 sf::Packet& operator>>(sf::Packet& packet, stuff& stuff_) {
 	statistic stat;
 	std::string name;
-	int nbEnchant, ID, typeObj, maxSlot, piece, minLvl;
+	sf::Uint32 ID;
+	sf::Uint8 nbEnchant, typeObj, maxSlot, piece, minLvl;
 	packet >> ID >> name >> typeObj >> maxSlot;
 	if (packet >> piece) {
 		std::cout << "good" << std::endl;

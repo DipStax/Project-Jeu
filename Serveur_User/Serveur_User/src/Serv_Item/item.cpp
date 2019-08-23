@@ -27,16 +27,17 @@ void item::setName(std::string name) {
 }
 
 void item::inPacket(sf::Packet& packet) {
-	packet << m_ID << m_name << m_typeObj;
+	packet << (sf::Uint32)m_ID << m_name << (sf::Uint8)m_typeObj;
 }
 
 sf::Packet& operator<<(sf::Packet& packet, item& item_) {
-	packet << item_.getID() << item_.getName() << static_cast<int>(item_.getTypeObj());
+	packet << (sf::Uint32)item_.getID() << item_.getName() << static_cast<sf::Uint8>(item_.getTypeObj());
 	return packet;
 }
 
 sf::Packet& operator>>(sf::Packet& packet, item& item) {
-	int ID, type;
+	sf::Uint32 ID;
+	sf::Uint8 type;
 	std::string name;
 	packet >> ID >> name >> type;
 	item.setID(ID);

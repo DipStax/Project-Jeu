@@ -39,12 +39,12 @@ namespace mCompte {
 				}
 				listBtn.emplace_back(std::make_unique<Bouton>(sf::Vector2f(750., 125 + nbPerso * 75.), "bin/img/txtr.png", 4));
 			}
-			else if (adrs == 2) {
+			if (adrs == 2) {
 				adrs = 1; // parametre
 				// TODO 
 				// include <Menu/parametre.h>
 			}
-			else if (adrs == 4) {
+			if (adrs == 4) {
 				listBtn.emplace_back(std::make_unique<Bouton>(sf::Vector2f(775, 445), "bin/img/ctpc.png", 5));;
 				listBtn.emplace_back(std::make_unique<Bouton>(sf::Vector2f(350, 88), "bin/img/cpc.png", 61));
 				listBtn.emplace_back(std::make_unique<Bouton>(sf::Vector2f(500, 88), "bin/img/cpc.png", 62));
@@ -160,7 +160,6 @@ namespace mCompte {
 
 	sf::Texture genTxtrSelect(std::unique_ptr<Perso>& perso) {
 		std::cout << "Generation des textures de selection." << std::endl;
-		sf::Sprite spritePerso = perso->getSprite();
 		sf::Texture txtr;
 		if (!txtr.loadFromFile("bin/img/txtr.png")) {
 			return txtr;
@@ -169,7 +168,7 @@ namespace mCompte {
 		sf::RenderTexture rdrTxtr;
 		rdrTxtr.create(txtr.getSize().x, txtr.getSize().y);
 		rdrTxtr.draw(bg);
-		rdrTxtr.draw(spritePerso);
+		perso->rdTxtrDraw(rdrTxtr);
 		rdrTxtr.display();
 		return rdrTxtr.getTexture();
 	}

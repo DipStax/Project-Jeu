@@ -37,7 +37,6 @@ std::map<TypeObj, stuff> Perso::getStuff() { return m_stuff; }
 int Perso::getNbSac() const { return m_nbSac; }
 int Perso::getManaAct() const { return m_manaAct; }
 int Perso::getVieAct() const { return m_vieAct; }
-sf::Sprite Perso::getSprite() const { return m_sprite; }
 skin::clr Perso::getClrSkin() const { return m_clrSkin; }
 hair::clr Perso::getClrHair() const { return m_clrHair; }
 
@@ -51,8 +50,10 @@ void Perso::changeColor(hair::clr color) {
 	this->initSprite();
 }
 
-void Perso::overwriteStuff(stuff equip) {
+void Perso::forceStuff(stuff equip) {
+	m_stuff.erase(equip.getTypeObj());
 	m_stuff.emplace(std::pair<TypeObj, stuff>(equip.getTypeObj(), equip));
+	this->upSprite();
 }
 
 bool Perso::equipeStuff(stuff equip) {
@@ -69,9 +70,10 @@ bool Perso::equipeStuff(stuff equip) {
 		return false;
 	}
 	m_sac.at(sac_to_use)->addObject<stuff>(equip);
+	this->upSprite();
 	return true;
 
-	// TODO FINIR LA FONCTION
+	// TODO FINIR LA FONCTION 
 }
 
 
@@ -88,33 +90,43 @@ void Perso::sacInPacket(sf::Packet& packet) {
 	}
 }
 
+void Perso::draw(sf::RenderWindow& screen) {
+	this->upSprite();
+	screen.draw(m_sptMain);
+}
+
+void Perso::rdTxtrDraw(sf::RenderTexture& rdTxtr) {
+	this->upSprite();
+	rdTxtr.draw(m_sptMain);
+}
+
 sf::Packet& operator<<(sf::Packet& packet, std::unique_ptr<Perso>& perso) {
-	packet << perso->getID() << perso->getPseudo() << perso->getMap() << perso->getPos().x
-		<< perso->getPos().y << perso->getType() << perso->getStat() << perso->getLevel()
-		<< perso->getExpAct() << perso->getArgent() << perso->getManaAct() << perso->getVieAct()
-		<< static_cast<int>(perso->getClrHair()) << static_cast<int>(perso->getClrSkin());
-	packet << perso->getNbStuff();
+	packet << (sf::Uint32)perso->getID() << perso->getPseudo() << (sf::Int8)perso->getMap() << (sf::Uint16)perso->getPos().x
+		<< (sf::Uint16)perso->getPos().y << (sf::Uint8)perso->getType() << perso->getStat() << (sf::Uint8)perso->getLevel()
+		<< (sf::Uint32)perso->getExpAct() << (sf::Uint32)perso->getArgent() << (sf::Uint16)perso->getManaAct() << (sf::Uint16)perso->getVieAct()
+		<< static_cast<sf::Uint8>(perso->getClrHair()) << static_cast<sf::Uint8>(perso->getClrSkin());
+	packet << (sf::Uint8)perso->getNbStuff();
 	for (auto& stuff_ : perso->getStuff()) {
 		packet << stuff_.second;
 	}
-	packet << perso->getNbSac();
+	packet << (sf::Uint8)perso->getNbSac();
 	perso->sacInPacket(packet);
 	return packet;
 }
 
 sf::Packet& operator>>(sf::Packet& packet, std::unique_ptr<Perso>& perso) {
-	int nbStuff;
+	sf::Uint8 nbStuff;
 	stuff stuff_;
 	packet >> nbStuff;
 	for (int i = 0; i < nbStuff; i++) {
 		packet >> stuff_;
-		perso->overwriteStuff(stuff_);
+		perso->forceStuff(stuff_);
 	}
 	perso->sacOutPacket(packet);
 	return packet;
 }
 
-std::ostream& operator<<(std::ostream &os, std::unique_ptr<Perso>& perso) {
+std::ostream& operator<<(std::ostream& os, std::unique_ptr<Perso>& perso) {
 	perso->write();
 	return os;
 }
@@ -132,7 +144,6 @@ void Perso::write() {
 		std::cout << stuff_.second;
 		std::cout << "<------------------>" << std::endl;
 	}
-
 }
 
 void Perso::sacOutPacket(sf::Packet& packet) {
@@ -148,16 +159,17 @@ void Perso::sacOutPacket(sf::Packet& packet) {
 }
 
 void Perso::initSprite() {
-	std::string str;
+	std::cout << "Loading texture and sprite for color skin and hair" << std::endl;
+	std::string path;
 	switch (m_clrSkin) {
 	case skin::clr::Blanc:
-		str = "./bin/img/skin/blanc.png";
+		path = "./bin/img/skin/blanc.png";
 		break;
 	case skin::clr::MaronC:
-		str = "./bin/img/skin/maronClair.png";
+		path = "./bin/img/skin/maronClair.png";
 		break;
 	case skin::clr::MaronF:
-		str = "./bin/img/skin/maronFonce.png";
+		path = "./bin/img/skin/maronFonce.png";
 		break;
 	case skin::clr::Beige:
 		break;
@@ -166,8 +178,25 @@ void Perso::initSprite() {
 	case skin::clr::Jaune:
 		break;
 	}
-	if (m_txtr.loadFromFile(str)) {
-		m_sprite.setTexture(m_txtr);
-		m_sprite.setTextureRect(sf::IntRect(0, 0, 64, 64));
+	if (!m_txtrPerso.loadFromFile(path)) {
+		std::cout << "Error loading texture: " << path << std::endl;
+		return;
 	}
+	m_sptPerso.setTexture(m_txtrPerso);
+	// TODO same thing but for hair
+	this->upSprite();
+}
+
+void Perso::upSprite() {
+	sf::RenderTexture rdTxtr;
+	if (!(rdTxtr.create(600, 600)))
+		std::cout << "Error create renderTexture" << std::endl;
+	rdTxtr.clear(sf::Color::Red);
+	rdTxtr.draw(m_sptPerso);
+	for (auto& stuff_ : m_stuff) {
+		stuff_.second.rdTxtrDraw(rdTxtr);
+	}
+	rdTxtr.display();
+	m_txtrMain = rdTxtr.getTexture();
+	m_sptMain.setTexture(m_txtrMain);
 }

@@ -204,3 +204,4 @@ Serveur_Master/bin/Debug/Serveur_Master.exe
 *.exe
 Client/Debug/stat.obj.enc
 Serveur_User/Debug/stuff.new.obj.enc
+*.enc

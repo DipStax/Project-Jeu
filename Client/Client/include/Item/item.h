@@ -23,13 +23,14 @@ public:
 	void setName(std::string name);
 	void setPosItem(sf::Vector2f pos);
 	void draw(sf::RenderWindow& screen);
-
+	void rdTxtrDrawIcon(sf::RenderTexture& rdTxtr);
 	virtual void inPacket(sf::Packet& packet);
 	friend sf::Packet& operator<<(sf::Packet& packet, item& item_);
 	friend sf::Packet& operator>>(sf::Packet& packet, item& item);
 	friend std::ostream& operator<<(std::ostream &os, item& perso);
 protected:
 	virtual void write();
+	//virtual void initSprite();
 	int m_ID;
 	std::string m_name;
 	TypeObj m_typeObj;

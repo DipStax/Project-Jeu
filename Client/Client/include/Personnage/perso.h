@@ -45,19 +45,20 @@ public:
 	int getNbSac() const;
 	int getManaAct() const;
 	int getVieAct() const;
-	sf::Sprite getSprite() const;
 	skin::clr getClrSkin() const;
 	hair::clr getClrHair() const;
 
 	void changeColor(skin::clr color);
 	void changeColor(hair::clr color);
 
-	void overwriteStuff(stuff equip);
+	void forceStuff(stuff equip);
 	bool equipeStuff(stuff equip);
 	void addSac(std::unique_ptr<sac> sac);
 	template<class T, class... Args>
 	void addInSac(Args&&... args);
 
+	void draw(sf::RenderWindow& screen);
+	void rdTxtrDraw(sf::RenderTexture& rdTxtr);
 	void sacInPacket(sf::Packet& packet);
 	void sacOutPacket(sf::Packet& packet);
 	friend sf::Packet& operator<<(sf::Packet& packet, std::unique_ptr<Perso>& perso);
@@ -66,6 +67,7 @@ public:
 protected:
 	void write();
 	void initSprite();
+	void upSprite();
 	std::string m_pseudo;
 	short m_lvl, m_NumSprite, m_mapAct;
 	sf::Vector2f m_pos;
@@ -83,8 +85,11 @@ protected:
 	skin::clr m_clrSkin;
 	const short m_maxLvl = 30;
 	// Variable du sprite
-	sf::Sprite m_sprite;
-	sf::Texture m_txtr;
+	
+	sf::Texture m_txtrMain;
+	sf::Sprite m_sptMain;
+	sf::Texture m_txtrPerso;
+	sf::Sprite m_sptPerso;
 };
 
 #include <Personnage/perso.inl>

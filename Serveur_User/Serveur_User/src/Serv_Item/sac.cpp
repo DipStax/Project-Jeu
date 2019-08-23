@@ -33,24 +33,25 @@ bool sac::posUse(sf::Vector2i pos) {
 void sac::itemInPacket(sf::Packet& packet) {
 	for (int i = 0; i < m_nbItem; i++) {
 		m_item[i].get()->inPacket(packet);
-		packet << m_posItem[i].x << m_posItem[i].y;
+		packet << (sf::Uint8)m_posItem[i].x << (sf::Uint8)m_posItem[i].y;
 	}
 }
 
 void sac::inPacket(sf::Packet& packet) {
-	packet << m_ID << m_typeObj << m_size.x << m_size.y << m_nbItem;
+	packet << (sf::Uint32)m_ID << (sf::Uint8)m_typeObj << (sf::Uint8)m_size.x << (sf::Uint8)m_size.y << (sf::Uint8)m_nbItem;
 	this->itemInPacket(packet);
 }
 
 sf::Packet& operator<<(sf::Packet& packet, sac& sac_) {
-	packet  << sac_.getID() << sac_.getName() << static_cast<int>(sac_.getTypeObj()) << sac_.getSize().x << sac_.getSize().y
-			<< sac_.getNbItem();
+	packet  << (sf::Uint32)sac_.getID() << sac_.getName() << static_cast<sf::Uint8>(sac_.getTypeObj()) << (sf::Uint8)sac_.getSize().x << (sf::Uint8)sac_.getSize().y
+			<< (sf::Uint8)sac_.getNbItem();
 	sac_.itemInPacket(packet);
 	return packet;
 }
 
 sf::Packet& operator>>(sf::Packet& packet, sac& sac_) {
-	int nbItem, ID, typeObj, maxSlot, piece;
+	sf::Uint32 ID;
+	sf::Uint8 nbItem, typeObj, maxSlot, piece;
 	std::string name;
 	sf::Vector2i pos, size;
 	statistic stat;
@@ -65,7 +66,7 @@ sf::Packet& operator>>(sf::Packet& packet, sac& sac_) {
 			sac_.addObject<enchant>(pos, std::move(enchant_));
 		}
 		else if (typeObj == 1) {
-			int nbEnchant, lvlMin;
+			sf::Uint8 nbEnchant, lvlMin;
 			packet >> maxSlot >> piece >> lvlMin >> stat;
 			PIECE pieceF = static_cast<PIECE>(piece);
 			stuff stuff_(ID, name, maxSlot, pieceF, lvlMin, stat);

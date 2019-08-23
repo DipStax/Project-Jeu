@@ -6,8 +6,7 @@ item::item(int ID, std::string name, TypeObj typeObj) {
 	m_ID = ID;
 	m_typeObj = typeObj;
 	m_name = name;
-	// TODO
-	// Initialise les texutres en fonction de l'ID
+	//this->initSprite();
 }
 
 item::~item() {}
@@ -18,8 +17,7 @@ std::string item::getName() const { return m_name; }
 
 void item::setID(int ID) {
 	m_ID = ID;
-	// TODO
-	// Re-initialise les texutres en fonction de l'ID
+	//this->initSprite();
 }
 
 void item::setTypeObj(TypeObj type) {
@@ -39,16 +37,23 @@ void item::draw(sf::RenderWindow& screen) {
 }
 
 void item::inPacket(sf::Packet& packet) {
-	packet << m_ID << m_name << m_typeObj;
+	packet << (sf::Uint32)m_ID << m_name << (sf::Uint8)m_typeObj;
+}
+
+void item::rdTxtrDrawIcon(sf::RenderTexture& rdTxtr) {
+	sf::Sprite sprite_c = m_sprite;
+	sprite_c.setScale(sf::Vector2f(16, 16));
+	rdTxtr.draw(sprite_c); // peut etre non-afficher car c'est une reference, a voir
 }
 
 sf::Packet& operator<<(sf::Packet& packet, item& item_) {
-	packet << item_.getID() << item_.getName() << static_cast<int>(item_.getTypeObj());
+	packet << (sf::Uint32)item_.getID() << item_.getName() << static_cast<sf::Uint8>(item_.getTypeObj());
 	return packet;
 }
 
 sf::Packet& operator>>(sf::Packet& packet, item& item) {
-	int ID, type;
+	sf::Uint32 ID;
+	sf::Uint8 type;
 	std::string name;
 	packet >> ID >> name >> type;
 	item.setID(ID);
@@ -66,3 +71,14 @@ void item::write() {
 	std::cout << "ID: " << m_ID << std::endl;
 	std::cout << "Name: " << m_name << std::endl;
 }
+
+/*
+void item::initSprite() {
+	std::string path = "./bin/img/item/" + std::to_string(m_ID) + ".png";
+	if (!m_txtr.loadFromFile(path)) {
+		std::cout << "Error loading texture: " << path << std::endl;
+		return;
+	}
+	m_sprite.setTexture(m_txtr);
+}
+*/

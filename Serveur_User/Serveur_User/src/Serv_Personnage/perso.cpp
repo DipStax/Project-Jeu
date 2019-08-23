@@ -47,7 +47,7 @@ void Perso::changeColor(hair::clr color) {
 	m_clrHair = color;
 }
 
-void Perso::overwriteStuff(stuff equip) {
+void Perso::forceStuff(stuff equip) {
 	m_stuff.emplace(std::pair<TypeObj, stuff>(equip.getTypeObj(), equip));
 }
 
@@ -85,26 +85,26 @@ void Perso::sacInPacket(sf::Packet& packet) {
 }
 
 sf::Packet& operator<<(sf::Packet& packet, std::unique_ptr<Perso>& perso) {
-	packet << perso->getID() << perso->getPseudo() << perso->getMap() << perso->getPos().x
-		<< perso->getPos().y << perso->getType() << perso->getStat() << perso->getLevel()
-		<< perso->getExpAct() << perso->getArgent() << perso->getManaAct() << perso->getVieAct()
-		<< static_cast<int>(perso->getClrHair()) << static_cast<int>(perso->getClrSkin());
-	packet << perso->getNbStuff();
+	packet << (sf::Uint32)perso->getID() << perso->getPseudo() << (sf::Int8)perso->getMap() << (sf::Uint16)perso->getPos().x
+		<< (sf::Uint16)perso->getPos().y << (sf::Uint8)perso->getType() << perso->getStat() << (sf::Uint8)perso->getLevel()
+		<< (sf::Uint32)perso->getExpAct() << (sf::Uint32)perso->getArgent() << (sf::Uint16)perso->getManaAct() << (sf::Uint16)perso->getVieAct()
+		<< static_cast<sf::Uint8>(perso->getClrHair()) << static_cast<sf::Uint8>(perso->getClrSkin());
+	packet << (sf::Uint8)perso->getNbStuff();
 	for (auto& stuff_ : perso->getStuff()) {
 		packet << stuff_.second;
 	}
-	packet << perso->getNbSac();
+	packet << (sf::Uint8)perso->getNbSac();
 	perso->sacInPacket(packet);
 	return packet;
 }
 
 sf::Packet& operator>>(sf::Packet& packet, std::unique_ptr<Perso>& perso) {
-	int nbStuff;
+	sf::Uint8 nbStuff;
 	stuff stuff_;
 	packet >> nbStuff;
 	for (int i = 0; i < nbStuff; i++) {
 		packet >> stuff_;
-		perso->overwriteStuff(stuff_);
+		perso->forceStuff(stuff_);
 	}
 	perso->sacOutPacket(packet);
 	return packet;

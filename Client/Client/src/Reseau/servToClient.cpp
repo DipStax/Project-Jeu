@@ -77,7 +77,7 @@ namespace stc {
 		for (int i = 0; i < nbStuff; i++) {
 			packet >> stuff_;
 			std::cout << stuff_ << std::endl;
-			perso->overwriteStuff(stuff_);
+			perso->forceStuff(stuff_);
 		}
 	}
 }

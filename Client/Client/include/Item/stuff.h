@@ -28,6 +28,7 @@ public:
 
 	void addStat(statistic& stat);
 	bool addEnchant(enchant& enchant_);
+	void rdTxtrDraw(sf::RenderTexture& rdTxtr);
 
 	void inPacket(sf::Packet& packet);
 	friend sf::Packet& operator<<(sf::Packet& packet, stuff& stuff_);

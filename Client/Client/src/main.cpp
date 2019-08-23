@@ -67,7 +67,6 @@ int main() {
 				perso->changeColor(static_cast<skin::clr>(creaPerso[1]));
 				std::cout << "Mise a jour des sprites." << std::endl;
 				std::cout << "-> Mise a jour de la couleur du personnage." << std::endl;
-				listSprite.push_back(perso->getSprite());
 				std::cout << perso << std::endl;
 			}
 		}
@@ -122,6 +121,10 @@ int main() {
 		}
 		for (auto& sprite : listSprite) {
 			screen.draw(sprite);
+		}
+		if (mCompte && adrs == 4 && adrs_tmp != 4) {
+			// affiche quand a une MaJ, event ctach: plus affichage
+			perso->draw(screen);
 		}
 		screen.display();
 	}

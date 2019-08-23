@@ -22,11 +22,11 @@ void enchant::getStat(std::vector<int>& stat) {
 }
 
 void enchant::inPacket(sf::Packet& packet) {
-	packet << m_ID << m_name << m_typeObj << m_stat;
+	packet << (sf::Uint32)m_ID << m_name << (sf::Uint8)m_typeObj << m_stat;
 }
 
 sf::Packet& operator<<(sf::Packet& packet, enchant& enchant_) {
-	packet << enchant_.getID() << enchant_.getName() << static_cast<int>(enchant_.getTypeObj()) << enchant_.getStat();
+	packet << (sf::Uint32)enchant_.getID() << enchant_.getName() << static_cast<sf::Uint8>(enchant_.getTypeObj()) << enchant_.getStat();
 	return packet;
 }
 

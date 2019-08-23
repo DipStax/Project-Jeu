@@ -21,13 +21,13 @@ sf::Packet& operator<<(sf::Packet& packet, statistic& stat) {
 	std::vector<int> vec;
 	stat.getStat(vec);
 	for (auto& stat_ : vec) {
-		packet << stat_;
+		packet << (sf::Uint16)stat_;
 	}
 	return packet;
 }
 
 sf::Packet& operator>>(sf::Packet& packet, statistic& stat) {
-	int stat_;
+	sf::Uint16 stat_;
 	ValType val;
 	for (int i = 0; i < 9; i++) {
 		packet >> stat_;

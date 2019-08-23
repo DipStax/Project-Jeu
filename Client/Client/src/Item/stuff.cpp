@@ -53,9 +53,14 @@ void stuff::getEnchantStat(std::vector<int>& stat) {
 
 PIECE stuff::getPiece() { return m_piece; }
 
+void stuff::rdTxtrDraw(sf::RenderTexture& rdTxtr) {
+	rdTxtr.draw(m_sprite);
+	// render a white rect w/o the stuff
+}
+
 void stuff::inPacket(sf::Packet& packet) {
-	packet << m_ID << m_name << static_cast<int>(m_typeObj) << m_maxSlot << static_cast<int>(m_piece) << m_lvlMin 
-		   << m_stat << m_enchant.size();
+	packet << (sf::Uint32)m_ID << m_name << static_cast<sf::Uint8>(m_typeObj) << (sf::Uint8)m_maxSlot << static_cast<sf::Uint8>(m_piece) << (sf::Uint8)m_lvlMin
+		   << m_stat << (sf::Uint8)m_enchant.size();
 	for (auto& enchant_ : m_enchant) {
 		packet << enchant_;
 	}
@@ -64,8 +69,8 @@ void stuff::inPacket(sf::Packet& packet) {
 sf::Packet& operator<<(sf::Packet& packet, stuff& stuff_) {
 	std::cout << "<---------->" << std::endl << "Packet << Stuff" << std::endl;
 	std::cout << stuff_.getID() << std::endl;
-	packet << stuff_.getID() << stuff_.getName() << static_cast<int>(stuff_.getTypeObj()) << stuff_.getMaxSlot()
-		<< static_cast<int>(stuff_.getPiece()) << stuff_.getMinLvl() << stuff_.getStat() << stuff_.getNbEnchant();
+	packet << (sf::Uint32)stuff_.getID() << stuff_.getName() << static_cast<sf::Uint8>(stuff_.getTypeObj()) << (sf::Uint8)stuff_.getMaxSlot()
+		<< static_cast<sf::Uint8>(stuff_.getPiece()) << (sf::Uint8)stuff_.getMinLvl() << stuff_.getStat() << (sf::Uint8)stuff_.getNbEnchant();
 	for (auto& enchant_ : stuff_.getEnchant()) {
 		packet << enchant_;
 	}
@@ -75,13 +80,14 @@ sf::Packet& operator<<(sf::Packet& packet, stuff& stuff_) {
 sf::Packet& operator>>(sf::Packet& packet, stuff& stuff_) {
 	statistic stat;
 	std::string name;
-	int nbEnchant = 99, ID, typeObj, maxSlot, piece, minLvl;
+	sf::Uint8 nbEnchant, typeObj, maxSlot, piece, minLvl;
+	sf::Uint32 ID;
 	packet >> ID >> name >> typeObj >> maxSlot >> piece >> minLvl >> stat;
-	if (packet >> nbEnchant)
+	if (!(packet >> nbEnchant))
 		std::cout << "Fail" << std::endl;
 		
 	std::cout << "NbEnchant: " << nbEnchant << std::endl;
-	stuff stuff__(ID, name, maxSlot, static_cast<PIECE>(piece / 65536), minLvl / 65536, stat);
+	stuff stuff__(ID, name, maxSlot, static_cast<PIECE>(piece), minLvl, stat);
 	packet >> nbEnchant;
 	for (int i = 0; i < nbEnchant; i++) {
 		packet >> ID >> name >> typeObj;
@@ -108,29 +114,34 @@ void stuff::write() {
 
 void stuff::initSprite() {
 	std::string path = "./bin/img/stuff/";
-	std::cout << "m_piece: " <<  static_cast<int>(m_piece) << std::endl;
 	switch (m_piece) {
-	case PIED: path += "Pied/";
+	case PIED: 
+		path += "Pied/";
 		break;
-	case JAMBE: path += "Jambe/";
+	case JAMBE: 
+		path += "Jambe/";
 		break;
-	case TORSE: path += "Torse/";
+	case TORSE: 
+		path += "Torse/";
 		break;
-	case MAIN: path += "Main/";
+	case MAIN: 
+		path += "Main/";
 		break;
-	case TETE: path += "Tete/";
+	case TETE: 
+		path += "Tete/";
 		break;
-	case ARME: path += "Arme/";
+	case ARME: 
+		path += "Arme/";
 		break;
-	case ARMESEC: path += "Arme sec/";
+	case ARMESEC:
+		path += "Arme/";
 		break;
 	}
 	path += m_name + ".png";
 	if (!m_txtr.loadFromFile(path)) {
-		std::cout << "Erreur lors du chargement de la texture." << std::endl;
+		std::cout << "Error loading texture: " << path << std::endl;
 		return;
 	}
 	m_sprite.setTexture(m_txtr);
-	m_sprite.setTextureRect(sf::IntRect(0, 0, 64, 64));
-	std::cout << "Generation de la texture de: " + m_name << std::endl;
+	std::cout << "The texture: " << path << " as loaded succesfuly" << std::endl;
 }

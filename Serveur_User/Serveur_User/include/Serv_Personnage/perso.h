@@ -52,7 +52,7 @@ public:
 	void changeColor(skin::clr color);
 	void changeColor(hair::clr color);
 
-	void overwriteStuff(stuff equip);
+	void forceStuff(stuff equip);
 	bool equipeStuff(stuff equip);
 	void addSac(std::unique_ptr<sac> sac);
 	template<class T, class... Args>
