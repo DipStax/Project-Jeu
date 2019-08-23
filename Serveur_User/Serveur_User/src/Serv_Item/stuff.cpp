@@ -77,8 +77,6 @@ sf::Packet& operator>>(sf::Packet& packet, stuff& stuff_) {
 	sf::Uint32 ID;
 	sf::Uint8 nbEnchant, typeObj, maxSlot, piece, minLvl;
 	packet >> ID >> name >> typeObj >> maxSlot >> piece >> minLvl >> stat;
-	std::cout << ID << " : " << name << " : " << typeObj << " : " << maxSlot << " : " << piece 
-			  << " : " << minLvl << " : " << stat << " : " << nbEnchant << std::endl;
 	stuff stuff__(ID, name, maxSlot, static_cast<PIECE>(piece), minLvl, stat);
 	packet >> nbEnchant;
 	for (int i = 0; i < nbEnchant; i++) {

@@ -41,7 +41,7 @@ public:
 	int getArgent() const;
 	statistic& getStat();
 	int getNbStuff() const;
-	std::map<TypeObj, stuff> getStuff();
+	std::map<PIECE, stuff> getStuff();
 	int getNbSac() const;
 	int getManaAct() const;
 	int getVieAct() const;
@@ -75,7 +75,7 @@ protected:
 	int m_expAct, m_expNextLvl;
 	int m_ID, m_argentBrute;
 	const int8_t m_maxSac = 3;
-	std::map<TypeObj, stuff> m_stuff;
+	std::map<PIECE, stuff> m_stuff;
 	std::vector<std::unique_ptr<sac>> m_sac;
 	TYPEPERSO m_type;
 	hair::clr m_clrHair;

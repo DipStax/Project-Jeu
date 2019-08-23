@@ -35,7 +35,7 @@ int Perso::getExpAct() const { return m_expAct; }
 int Perso::getArgent() const { return m_argentBrute; }
 statistic& Perso::getStat() { return m_stat; }
 int Perso::getNbStuff() const { return m_nbStuff; }
-std::map<TypeObj, stuff> Perso::getStuff() { return m_stuff; }
+std::map<PIECE, stuff> Perso::getStuff() { return m_stuff; }
 int Perso::getNbSac() const { return m_nbSac; }
 int Perso::getManaAct() const { return m_manaAct; }
 int Perso::getVieAct() const { return m_vieAct; }
@@ -56,14 +56,14 @@ void Perso::changeColor(hair::clr color) {
 }
 
 void Perso::forceStuff(stuff equip) {
-	m_stuff.erase(equip.getTypeObj());
-	m_stuff.emplace(std::pair<TypeObj, stuff>(equip.getTypeObj(), equip));
+	m_stuff[equip.getPiece()] = equip;
+	//m_stuff.insert(std::make_pair(equip.getTypeObj(), equip));
 	this->setSprite();
 }
 
 bool Perso::equipeStuff(stuff equip) {
 	// TO DO
-	std::map<TypeObj, stuff>::iterator  it = m_stuff.find(equip.getTypeObj());
+	std::map<PIECE, stuff>::iterator  it = m_stuff.find(equip.getPiece());
 	int sac_to_use = 0;
 	if (it != m_stuff.end()) {
 		for (auto& sac_ : m_sac) {
@@ -194,9 +194,13 @@ void Perso::setSprite() {
 	if (!(rdTxtr.create(600, 600)))
 		std::cout << "Error create renderTexture" << std::endl;		
 	rdTxtr.draw(m_sptPerso);
+	std::cout << m_stuff.size();
+	std::vector<sf::Texture> txtr_tmp;
+	std::vector< sf::Sprite> spt_tmp;
 	for (auto& stuff_ : m_stuff) {
-		sf::Sprite spt_tmp(stuff_.second.getTxtr());
-		rdTxtr.draw(spt_tmp);
+		txtr_tmp.push_back(stuff_.second.getTxtr());
+		spt_tmp.emplace_back(txtr_tmp.back());
+		rdTxtr.draw(spt_tmp.back());
 	}
 	rdTxtr.display();
 	m_txtrMain = rdTxtr.getTexture();

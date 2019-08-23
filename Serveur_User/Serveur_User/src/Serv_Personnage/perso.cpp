@@ -32,7 +32,7 @@ int Perso::getExpAct() const { return m_expAct; }
 int Perso::getArgent() const { return m_argentBrute; }
 statistic& Perso::getStat() { return m_stat; }
 int Perso::getNbStuff() const { return m_nbStuff; }
-std::map<TypeObj, stuff> Perso::getStuff() { return m_stuff; }
+std::map<PIECE, stuff> Perso::getStuff() { return m_stuff; }
 int Perso::getNbSac() const { return m_nbSac; }
 int Perso::getManaAct() const { return m_manaAct; }
 int Perso::getVieAct() const { return m_vieAct; }
@@ -48,12 +48,12 @@ void Perso::changeColor(hair::clr color) {
 }
 
 void Perso::forceStuff(stuff equip) {
-	m_stuff.emplace(std::pair<TypeObj, stuff>(equip.getTypeObj(), equip));
+	m_stuff[equip.getPiece()] = equip;
 }
 
 bool Perso::equipeStuff(stuff equip) {
 	// TO DO
-	std::map<TypeObj, stuff>::iterator  it = m_stuff.find(equip.getTypeObj());
+	std::map<PIECE, stuff>::iterator  it = m_stuff.find(equip.getPiece());
 	int sac_to_use = 0;
 	if (it != m_stuff.end()) {
 		for (auto& sac_ : m_sac) {
