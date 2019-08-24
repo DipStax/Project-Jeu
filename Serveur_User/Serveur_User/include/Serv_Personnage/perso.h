@@ -45,7 +45,6 @@ public:
 	int getNbSac() const;
 	int getManaAct() const;
 	int getVieAct() const;
-	sf::Sprite getSprite() const;
 	skin::clr getClrSkin() const;
 	hair::clr getClrHair() const;
 

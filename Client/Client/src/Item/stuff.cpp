@@ -124,7 +124,7 @@ void stuff::initSprite() {
 		path += "Arme/";
 		break;
 	case ARMESEC:
-		path += "Arme/";
+		path += "Arme sec/";
 		break;
 	}
 	path += m_name + ".png";
