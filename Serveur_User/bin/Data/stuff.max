@@ -1,7 +1,9 @@
 ID  ;  Name  ;  TypePerso  ;  MaxSlot  ;  Piece  ;  MinLvl  ;  MAN/VIE/DMG/ARM/RES/PEA/PEM/SPE/CRI
 
-1;Plastron du berserk;1;0;2;0;0/0/0/0/0/0/0/0/0
-2;Pantalon du berserk;1;0;1;0;0/0/0/0/0/0/0/0/0
-3;Casque du berserk;1;0;4;0;0/0/0/0/0/0/0/0/0
+1;Plastron de berserk;1;0;2;0;0/0/0/0/0/0/0/0/0
+2;Pantalon de berserk;1;0;1;0;0/0/0/0/0/0/0/0/0
+3;Casque de berserk;1;0;4;0;0/0/0/0/0/0/0/0/0
 4;Botte de berzerk;1;0;0;0;0/0/0/0/0/0/0/0/0
 5;Gants de berserk;1;0;3;0;0/0/0/0/0/0/0/0/0
+6;Epee de berserk;1;0;5;0;0/0/0/0/0/0/0/0/0
+7;Hache de berserk;1;0;6;0;0/0/0/0/0/0/0/0/0
