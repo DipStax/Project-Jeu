@@ -61,15 +61,14 @@ namespace stc {
 	}
 
 	void receiveMaxStuff(std::unique_ptr<Perso>& perso, sf::TcpSocket& servReceive, sf::TcpListener& listener) {
-		sf::Packet packet;
-		std::string dir;
-		int nbStuff;
 		if (listener.accept(servReceive) != sf::Socket::Done) {
 			return;
 		}
+		sf::Packet packet;
+		std::string dir;
+		sf::Uint8 nbStuff;
 		servReceive.receive(packet);
 		packet >> dir >> nbStuff;
-		std::cout << "nbStuff val: " << nbStuff << std::endl;
 		if (dir != "1.2.3.1") {
 			return;
 		}
@@ -80,4 +79,39 @@ namespace stc {
 			perso->forceStuff(stuff_);
 		}
 	}
+
+	bool getPersoVerfi(sf::TcpSocket& servReceive, sf::TcpListener& listener) {
+		if (listener.accept(servReceive) != sf::Socket::Done) {
+			return false;
+		}
+		sf::Packet packet;
+		std::string dir;
+		bool verif;
+		servReceive.receive(packet);
+		packet >> dir >> verif;
+		if (dir != "1.2.1.1" || dir != "1.2.1.2") {
+			return false;
+		}
+		return verif;
+	}
+
+	void receiveMinStuff(std::unique_ptr<Perso>& perso, sf::TcpSocket& servReceive, sf::TcpListener& listener) {
+		if (listener.accept(servReceive) != sf::Socket::Done) {
+			return;
+		}
+		sf::Packet packet;
+		std::string dir;
+		sf::Uint8 nbStuff;
+		servReceive.receive(packet);
+		packet >> dir >> nbStuff;
+		if (dir != "1.2.1.3") {
+			return;
+		}
+		for (int i = 0; i < nbStuff; i++) {
+			stuff stuff_;
+			packet >> stuff_;
+			perso->forceStuff(stuff_);
+		}
+	}
+
 }

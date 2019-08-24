@@ -61,10 +61,10 @@ namespace csu {
 //				-"1.2.1.1": pseudo deja utilise
 //				-"1.2.1.2": personnage bien genere
 //				!-> Ajout du personnage dans le fichier JSON du compte
-//				!-> envoie du code "2.1"
-//					-> ID compte
-//					-> ID perso
-//					-> Adresse IP
+//				!-> envoie du code "1.2.1.3"
+//					-> dir
+//					-> nbStuff
+//					-> stuff
 //			Direction ".2": choisir un personnage
 //			-"1.2.2.1"
 //				-> ID perso

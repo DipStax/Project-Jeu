@@ -14,4 +14,5 @@ namespace cts {
 	sf::Packet packetCon(std::vector<std::unique_ptr<Bouton>>& list_btn, std::string adrsIP);
 	sf::Packet packetIns(std::vector<std::unique_ptr<Bouton>>& list_btn, std::string adrsIP);
 	void packetMaxStuff(int type, std::string adrsIP, sf::TcpSocket& socketServ);
+	void persoVerif(std::unique_ptr<Perso>& perso, int IDCompte, std::string adrsIP, sf::TcpSocket& socketServ);
 }

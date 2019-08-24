@@ -43,8 +43,17 @@ namespace cts {
 	void packetMaxStuff(int type, std::string adrsIP, sf::TcpSocket& socketServ) {
 		std::string direction = "1.2.3";
 		sf::Packet packet;
-		socketServ.connect(IPSERV, SOSERV);
 		packet << direction << type << adrsIP;
+		socketServ.connect(IPSERV, SOSERV);
+		socketServ.send(packet);
+	}
+
+	void persoVerif(std::unique_ptr<Perso>& perso, int IDCompte, std::string adrsIP, sf::TcpSocket& socketServ) {
+		std::string direction = "1.2.1";
+		sf::Packet packet;
+		perso->clearStuff();
+		packet << direction << IDCompte << perso << adrsIP;
+		socketServ.connect(IPSERV, SOSERV);
 		socketServ.send(packet);
 	}
 }

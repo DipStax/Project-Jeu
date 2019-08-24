@@ -10,6 +10,7 @@ namespace mCompte {
 		// 3: deconnexion
 		// 4: menu de creation de personnage
 		// 5: validation de la creation
+		// 51: creation valide
 		// 61: changement de couleur pour les cheveux -
 		// 62: changement de couleur pour les cheveux +
 		// 71: changement de couleur pour la peau -
@@ -173,6 +174,18 @@ namespace mCompte {
 		return rdrTxtr.getTexture();
 	}
 
+	void persoVerif(std::unique_ptr<Perso>& perso, short& adrs_tmp, int IDCompte, std::string adrsIP,
+					sf::TcpSocket& socketServ, sf::TcpSocket& servReceive, sf::TcpListener& listener) {
+		cts::persoVerif(perso, IDCompte, adrsIP, socketServ);
+		bool verif = stc::getPersoVerfi(servReceive, listener);
+		if (verif) {
+			stc::receiveMinStuff(perso, servReceive, listener);
+			adrs_tmp = 51;
+			return;
+		}
+		adrs_tmp = 52;
+	}
+
 	void genPersoDemo(std::unique_ptr<Perso>& perso, std::array<int, 5> creaPerso) {
 		std::cout << "Creation du personnage." << std::endl;
 		hair::clr colorHair = static_cast<hair::clr>(creaPerso[0]);
@@ -186,4 +199,6 @@ namespace mCompte {
 		}
 		perso->setPos(50, 50);
 	}
+
+
 }

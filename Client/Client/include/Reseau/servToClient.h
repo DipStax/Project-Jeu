@@ -10,4 +10,6 @@ namespace stc {
 	std::string getIP(sf::TcpSocket& socketServ);
 	int AccGen(std::vector<std::unique_ptr<Perso>>& listPerso, sf::Packet& packet, std::string& dirError);
 	void receiveMaxStuff(std::unique_ptr<Perso>& perso, sf::TcpSocket& servReceive, sf::TcpListener& listener);
+	bool getPersoVerfi(sf::TcpSocket& servReceive, sf::TcpListener& listener);
+	void receiveMinStuff(std::unique_ptr<Perso>& perso, sf::TcpSocket& servReceive, sf::TcpListener& listener);
 }

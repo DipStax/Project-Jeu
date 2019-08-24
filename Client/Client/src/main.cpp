@@ -15,11 +15,12 @@
 #define SOCLIENT 40000
 
 int main() {
-	sf::RenderWindow screen(sf::VideoMode(900, 500), "Jeu");
+	sf::Vector2u sizeScreen(900, 500);
+	sf::RenderWindow screen(sf::VideoMode(sizeScreen.x, sizeScreen.y), "Jeu");
 	screen.setActive();
 	screen.setPosition(sf::Vector2i(500, 500));
 	short adrs = 1, adrs_tmp = 1;
-	bool mMain = true, mCompte = false;
+	bool mMain = true, mCompte = false, game = false;
 	std::vector<std::unique_ptr<Bouton>> listBtn;
 	std::vector<std::unique_ptr<Perso>> listPerso;
 	std::unique_ptr<Perso> perso;
@@ -69,10 +70,13 @@ int main() {
 				std::cout << "-> Mise a jour de la couleur du personnage." << std::endl;
 				std::cout << perso << std::endl;
 			}
-		}
+		} 
 		while (screen.pollEvent(event)) {
 			if (event.type == sf::Event::Closed) {
 				screen.close();
+			}
+			if (event.type == sf::Event::Resized) {
+				screen.setSize(sizeScreen);
 			}
 			if (mMain) {
 				mMain::setMenu(listBtn, adrs);
@@ -110,9 +114,31 @@ int main() {
 				if (adrs == 1 || adrs == 4) {
 					mCompte::setMenu(listBtn, listPerso, listTxtr, creaPerso, adrs, perso, adrsIP, servSend, servReceive, listener);
 				}
+				if (adrs_tmp == 5) {
+					mCompte::persoVerif(perso, adrs_tmp, accID, adrsIP, servReceive, servSend, listener);
+					if (adrs_tmp == 51) {
+						adrs = 0;
+						mCompte = false;
+						game = true;
+						// TODO
+						// tout clear
+						// mettre en place la com serv_worl <-> client
+					}
+					else {
+						sf::Text txt;
+						txt.setFont(fontRobotRegular);
+						txt.setCharacterSize(15);
+						txt.setFillColor(sf::Color::Red);
+						txt.setString("Pseudo deja utilisé");
+						txt.setPosition(sf::Vector2f(100, 100)); // a modifier
+						listText.emplace_back(txt);
+						adrs_tmp = 0;
+					}
+				}
 				mCompte::boutonInput(adrs_tmp, adrs, listSprite, listBtn, creaPerso);
-				// TODO
-				// gestion de la validation
+			}
+			else if (game) {
+				std::cout << "In game" << std::endl;
 			}
 		}
 		screen.clear(sf::Color::White);
@@ -127,11 +153,9 @@ int main() {
 		}
 		
 		if (mCompte && adrs == 4) {
-			// affiche quand a une MaJ, event ctach: plus affichage
 			perso->draw(screen);
 		}
 		screen.display();
 	}
-	
 	return 0;
 }

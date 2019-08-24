@@ -18,4 +18,6 @@ namespace mCompte {
 		std::vector<sf::Sprite>& listSprite, sf::RenderWindow& screen);
 	void genPersoDemo(std::unique_ptr<Perso>& perso, std::array<int, 5> creaPerso);
 	sf::Texture genTxtrSelect(std::unique_ptr<Perso>& perso);
+	void persoVerif(std::unique_ptr<Perso>& perso, short& adrs_tmp, int IDCompte, std::string adrsIP,
+		sf::TcpSocket& socketServ, sf::TcpSocket& servReceive, sf::TcpListener& listener);
 }
