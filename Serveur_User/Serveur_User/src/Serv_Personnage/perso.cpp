@@ -39,6 +39,18 @@ int Perso::getVieAct() const { return m_vieAct; }
 skin::clr Perso::getClrSkin() const { return m_clrSkin; }
 hair::clr Perso::getClrHair() const { return m_clrHair; }
 
+void Perso::setName(std::string name) {
+	m_pseudo = name;
+}
+
+void Perso::setPos(float x, float y) {
+	m_pos = sf::Vector2f(x, y);
+}
+
+void Perso::clearStuff() {
+	m_stuff.clear();
+}
+
 void Perso::changeColor(skin::clr color) {
 	m_clrSkin = color;
 }

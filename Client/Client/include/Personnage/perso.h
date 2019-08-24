@@ -48,7 +48,9 @@ public:
 	skin::clr getClrSkin() const;
 	hair::clr getClrHair() const;
 
+	void setName(std::string name);
 	void setPos(float x, float y);
+	void clearStuff();
 
 	void changeColor(skin::clr color);
 	void changeColor(hair::clr color);
@@ -72,7 +74,7 @@ protected:
 	void setSprite();
 	void upSprite();
 	std::string m_pseudo;
-	short m_lvl, m_NumSprite, m_mapAct;
+	short m_lvl, m_mapAct;
 	sf::Vector2f m_pos;
 	statistic m_stat;
 	int m_nbStuff, m_nbSac;
