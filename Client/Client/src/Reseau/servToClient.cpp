@@ -80,19 +80,17 @@ namespace stc {
 		}
 	}
 
-	bool getPersoVerfi(sf::TcpSocket& servReceive, sf::TcpListener& listener) {
+	void getPersoVerif(sf::TcpSocket& servReceive, sf::TcpListener& listener, std::string& dir) {
 		if (listener.accept(servReceive) != sf::Socket::Done) {
-			return false;
+			return;
 		}
 		sf::Packet packet;
-		std::string dir;
 		bool verif;
 		servReceive.receive(packet);
 		packet >> dir >> verif;
-		if (dir != "1.2.1.1" || dir != "1.2.1.2") {
-			return false;
+		if (dir != "1.2.1.1" || dir != "1.2.1.2" || dir != "1.2.1.3") {
+			dir = "0.0.0.0";
 		}
-		return verif;
 	}
 
 	void receiveMinStuff(std::unique_ptr<Perso>& perso, sf::TcpSocket& servReceive, sf::TcpListener& listener) {

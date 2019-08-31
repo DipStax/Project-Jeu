@@ -58,8 +58,10 @@ namespace csu {
 //			-> Perso
 //			-> Adresse IP
 //			Retour:
-//				-"1.2.1.1": pseudo deja utilise
-//				-"1.2.1.2": personnage bien genere
+//				-> bool verif
+//				-"1.2.1.1": pseudo deja utilise (false)
+//				-"1.2.1.2": nombre de personnage max (2) (false)
+//				-"1.2.1.3": personnage bien genere (true)
 //				!-> Ajout du personnage dans le fichier JSON du compte
 //				!-> envoie du code "1.2.1.3"
 //					-> dir
