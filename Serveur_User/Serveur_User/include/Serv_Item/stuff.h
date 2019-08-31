@@ -2,13 +2,14 @@
 #define DEF_STUFF
 
 #include <SFML/Graphics.hpp>
+
 #include <iostream>
+#include <iomanip>
 
 #include <Serv_Personnage/Stat.h>
-
 #include <Serv_Item/item.h>
 #include <Serv_Item/enchant.h>
-#include <iomanip>
+
 
 class stuff : public item {
 public:
@@ -30,9 +31,11 @@ public:
 	bool addEnchant(enchant& enchant_);
 
 	void inPacket(sf::Packet& packet);
+	void inJson(nlohmann::json& json);
 	friend sf::Packet& operator<<(sf::Packet& packet, stuff& stuff_);
 	friend sf::Packet& operator>>(sf::Packet& packet, stuff& stuff_);
 	friend std::ostream& operator<<(std::ostream &os, stuff& stuff_);
+	friend nlohmann::json& operator<<(nlohmann::json& json, stuff& stuff_);
 private:
 	void write();
 	void getEnchantStat(std::vector<int>& stat);

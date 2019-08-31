@@ -3,6 +3,8 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Network/Packet.hpp>
+#include <Json.hpp>
+
 #include <iostream>
 
 enum PIECE { PIED, JAMBE, TORSE, MAIN, TETE, ARME, ARMESEC };
@@ -23,9 +25,11 @@ public:
 	void setName(std::string name);
 
 	virtual void inPacket(sf::Packet& packet);
+	virtual void inJson(nlohmann::json& json);
 	friend sf::Packet& operator<<(sf::Packet& packet, item& item_);
-	friend sf::Packet& operator>>(sf::Packet& packet, item& item);
+	friend sf::Packet& operator>>(sf::Packet& packet, item& item_);
 	friend std::ostream& operator<<(std::ostream &os, item& perso);
+	friend nlohmann::json& operator<<(nlohmann::json& json, item& item_);
 protected:
 	virtual void write();
 	int m_ID;
