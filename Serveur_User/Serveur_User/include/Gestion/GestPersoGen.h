@@ -11,7 +11,7 @@ std::istream& operator>>(std::istream& is, SplitSlash& output);
 
 namespace gpg {
 	void addMinStuff(std::unique_ptr<Perso>& perso, std::string adrsIP);
-	void savePerso(std::unique_ptr<Perso>& perso, int IDcompte);
+	void savePerso(std::unique_ptr<Perso>& perso, int IDcompte, sqlite3* db);
 
 	void sendMaxStuff(sf::Packet& packet);
 

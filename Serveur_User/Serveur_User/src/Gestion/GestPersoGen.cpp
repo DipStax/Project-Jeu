@@ -7,9 +7,10 @@ namespace gpg {
 		sf::Packet packet;
 		std::string dir = "1.2.1.1";
 		packet << dir;
+		perso->clearStuff();
 		for (auto& stuff_ : listStuff) {
 			packet << stuff_;
-			perso->equipeStuff(stuff_);
+			perso->forceStuff(stuff_);
 		}
 		sf::TcpSocket socket;
 		sf::Socket::Status status = socket.connect(adrsIP, 40000);
@@ -20,8 +21,9 @@ namespace gpg {
 		std::cout << "-> Envoie au client (" << adrsIP << ") du code: 1.2.1.1" << std::endl;
 	}
 
-	void savePerso(std::unique_ptr<Perso>& perso, int IDcompte) {
+	void savePerso(std::unique_ptr<Perso>& perso, int IDcompte, sqlite3* db) {
 		nlohmann::json json;
+		json << perso;
 		// TODO
 		// operateur<<
 		// json << perso;
