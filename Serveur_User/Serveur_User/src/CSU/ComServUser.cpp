@@ -183,9 +183,9 @@ namespace csu {
 		stuff stuff_;
 		int ID, map, lvl, expAct, type, argentBrute, manaAct, vieAct;
 		std::string pseudo;
-		sf::Vector2f pos;
+		sf::Vector3f pos;
 		int colorHair, colorSkin;
-		packet >> IDcompte >> ID >> pseudo >> map >> pos.x >> pos.y >> lvl >> expAct >> type >> argentBrute
+		packet >> IDcompte >> ID >> pseudo >> map >> pos.x >> pos.y >> pos.z >> lvl >> expAct >> type >> argentBrute
 			   >> manaAct >> vieAct >> colorHair >> colorSkin;
 		TYPEPERSO typeF = static_cast<TYPEPERSO>(type);
 		hair::clr colorHairF = static_cast<hair::clr>(colorHair);
@@ -199,19 +199,61 @@ namespace csu {
 		//case MAGE:
 		}
 		packet >> perso >> adrsIP;
-		std::vector<std::vector<std::string>> info_cb_pseudo;
 		char* errMsg;
-		std::string com = "SELECT * FROM perso WHERE pseudo = '" + pseudo + "'";
-		int verif = sqlite3_exec(db, com.c_str(), csu::callback, &info_cb_pseudo, &errMsg);
+		std::vector<std::vector<std::string>> info_cb_persoAcc;
+		std::string com = "SELECT * FROM perso WHERE IDCompe = '" + std::to_string(IDcompte) + "'";
+		std::vector<std::vector<std::string>> info_cb_pseudo;
+		int verif = sqlite3_exec(db, com.c_str(), csu::callback, &info_cb_persoAcc, &errMsg);
+		if (verif) {
+			std::cout << "Erreur lors de la recherche du pseudo: " << sqlite3_errmsg(db);
+			csu::sendError(adrsIP);
+			return false;
+		}
+		if (info_cb_persoAcc.size() > 0) {
+			// trop de personnage
+			sf::Packet packetServ;
+			std::string dir = "1.2.1.2";
+			packetServ << dir << false;
+			sf::TcpSocket socket;
+			sf::Socket::Status status = socket.connect(adrsIP, 40000);
+			if (status != sf::Socket::Done) {
+				std::cout << "La connexion au client a echoue en voulant envoie le code: " << dir << std::endl;
+				return false;
+			}
+			socket.send(packetServ);
+			return false;
+		}
+		com = "SELECT * FROM perso WHERE pseudo = '" + pseudo + "'";
+		verif = sqlite3_exec(db, com.c_str(), csu::callback, &info_cb_pseudo, &errMsg);
 		if (verif) {
 			std::cout << "Erreur lors de la recherche du pseudo: " << sqlite3_errmsg(db);
 			csu::sendError(adrsIP);
 			return false;
 		}
 		if (info_cb_pseudo.size() > 0) {
-			// pseudo deja utilise (gestion client TODO)
+			// pseudo deja utilise
+			sf::Packet packetServ;
+			std::string dir = "1.2.1.1";
+			packetServ << dir;
+			sf::TcpSocket socket;
+			sf::Socket::Status status = socket.connect(adrsIP, 40000);
+			if (status != sf::Socket::Done) {
+				std::cout << "La connexion au client a echoue en voulant envoie le code: " << dir << std::endl;
+				return false;
+			}
+			socket.send(packetServ);
 			return false;
 		}
+		sf::Packet packetServ;
+		std::string dir = "1.2.1.3";
+		packetServ << dir;
+		sf::TcpSocket socket;
+		sf::Socket::Status status = socket.connect(adrsIP, 40000);
+		if (status != sf::Socket::Done) {
+			std::cout << "La connexion au client a echoue en voulant envoie le code: " << dir << std::endl;
+			return false;
+		}
+		socket.send(packetServ);
 		return true;
 	}
 }
