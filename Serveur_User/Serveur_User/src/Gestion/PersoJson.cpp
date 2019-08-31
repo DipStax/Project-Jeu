@@ -1,55 +1,69 @@
 #include <Gestion/PersoJson.h>
 
+/***********************************************\
+||                                             ||
+||      A REFAIRE ENTIEREMENT EN FONCTION      ||
+||            DU NOUVEAU MODELE JSON           ||
+||                                             ||
+\***********************************************/
+
 namespace gjs {
 	void genListPerso(std::vector<std::unique_ptr<Perso>>& listPerso, int ID, std::vector<ObjectFile> listObjFile) {
 		std::cout << "Generation de la liste de personnage du compte." << std::endl;
-		nlohmann::json fjson;
-		std::string accFile = "bin/Compte/" + std::to_string(ID) + ".json";
-		std::ifstream fichier(accFile.c_str());
-		fichier >> fjson;
-		int nbPerso = fjson["nb Perso"].get<int>();
-		for (int i = 0; i < nbPerso; i++) {
-			nlohmann::json pjson = fjson["Personnage"][i].get<nlohmann::json>();
+		std::vector<int> ListIDPerso;
+		// acceder a la bdd pour avoir les ID
+		for (int IDPerso : ListIDPerso) {
+			nlohmann::json json;
+			std::string accFile = "bin/Personnage/" + std::to_string(IDPerso) + ".json";
+			std::ifstream fichier(accFile.c_str());
+			fichier >> json;
 			std::unique_ptr<Perso> perso;
-			gjs::genPerso(perso, pjson);
-			int nbStuff = pjson["nbStuff"].get<int>();
-			for (int i = 0; i < nbStuff; i++) {
-				stuff stuff_ = gjs::genStuff(pjson, i, listObjFile);
-				perso->equipeStuff(stuff_);
-			}
-			int nbSac = pjson["nbSac"].get<int>();
-			for (int i=0; i < nbSac; i++) {
-				nlohmann::json sjson = pjson["Sac"][i].get<nlohmann::json>();
-				int ID = sjson["ID"].get<int>();
-				sf::Vector2i size(sjson["Size"]["X"].get<int>(), pjson["Size"]["Y"].get<int>());
-				std::unique_ptr<sac> sac_ = std::make_unique<sac>(ID, size);
-				int nbItem = pjson["nbItem"].get<int>();
-				for (int i = 0; i < nbItem; i++) {
-					nlohmann::json ijson = sjson[i].get<nlohmann::json>();
-					gjs::genItem(ijson, sac_, listObjFile);
+			gjs::genPerso(perso, json);
+			auto stuff_it = json.find("Stuff");
+			if (stuff_it != json.end()) {
+				for (auto& stuff_it_ : *stuff_it) {
+					stuff stuff_ = gjs::genStuff(stuff_it_, listObjFile);
+					perso->forceStuff(stuff_);
 				}
-				perso->addSac(std::move(sac_));
 			}
+
+
+
+
+
+			auto sac_it = json.find("Sac");
+			if (sac_it != json.end()) {
+				for (auto& sac_it_ : *sac_it) {
+					int ID = sac_it_["ID"].get<int>();
+					sf::Vector2i size(sac_it_["Size x"].get<int>(), sac_it_["Size y"].get<int>());
+					std::unique_ptr<sac> sac_ = std::make_unique<sac>(ID, size);
+					auto item_it = sac_it_.find("Item");
+					if (item_it != json.end()) {
+						for (auto& item_it_ : *item_it) {
+							gjs::genItemSac(item_it_, sac_, listObjFile);
+						}
+					}
+					perso->addSac(std::move(sac_));
+				}
+			}
+			listPerso.push_back(std::move(perso));
 		}
 	}
 
-	void genPerso(std::unique_ptr<Perso>& perso, nlohmann::json& pjson) {
+	void genPerso(std::unique_ptr<Perso>& perso, nlohmann::json& json) {
 		std::cout << "-> Generation d'un personnage." << std::endl;
-		int type = pjson["Type"].get<int>();
-		TYPEPERSO typeF = static_cast<TYPEPERSO>(type);
-		int ID = pjson["ID"].get<int>();
-		std::string name = pjson["Pseudo"].get<std::string>();
-		int map = pjson["Map"].get<int>();
-		sf::Vector2f pos(pjson["Pos"]["X"].get<float>(), pjson["Pos"]["Y"].get<float>());
-		int lvl = pjson["Exp"]["lvl"].get<int>();
-		int expAct = pjson["Exp"]["expAct"].get<int>();
-		int pv = pvMax(typeF);
-		int mana = manaMax(typeF);
-		int argBrute = pjson["Argent"].get<int>();
-		int cHair = pjson["Color"]["Hair"].get<int>();
-		hair::clr cHairF = static_cast<hair::clr>(cHair);
-		int cSkin = pjson["Color"]["Skin"].get<int>();
-		skin::clr cSkinF = static_cast<skin::clr>(cSkin);
+		TYPEPERSO type = json["Type"].get<TYPEPERSO>();
+		int ID = json["ID"].get<int>();
+		std::string name = json["Pseudo"].get<std::string>();
+		int map = json["World"]["Map"].get<int>();
+		sf::Vector3f pos(json["World"]["Position x"].get<float>(), json["World"]["Position y"].get<float>(), json["World"]["Position z"].get<float>());
+		int lvl = json["Exp"]["lvl"].get<int>();
+		int expAct = json["Exp Actuelle"].get<int>();
+		int pv = pvMax(type, lvl);
+		int mana = manaMax(type, lvl);
+		int argBrute = json["Argent brute"].get<int>();
+		hair::clr cHair = json["Coleur"]["Cheveux"].get<hair::clr>();
+		skin::clr cSkin = json["Coleur"]["Peau"].get<skin::clr>();
 		/*
 		switch (type) {
 			case 0:
@@ -63,30 +77,25 @@ namespace gjs {
 
 		}
 		*/
-		perso = std::make_unique<Perso>(ID, name, map, pos, lvl, expAct, typeF, argBrute, mana, pv, cHairF, cSkinF);
+		perso = std::make_unique<Perso>(ID, name, map, pos, lvl, expAct, type, argBrute, mana, pv, cHair, cSkin);
 	}
 
-	stuff genStuff(nlohmann::json& pjson, int i, std::vector<ObjectFile> listObjFile) {
-		std::cout << "    -> Generation d'une piece de stuff." << std::endl;
-		nlohmann::json sjson = pjson["Stuff"][i].get<nlohmann::json>();
-		return genStuff(sjson, listObjFile);
-	}
-
-	stuff genStuff(nlohmann::json& ijson, std::vector<ObjectFile> listObjFile) { 
+	stuff genStuff(nlohmann::json& json, std::vector<ObjectFile> listObjFile) { 
 		std::cout << "  -> Generation d'une piece de stuff." << std::endl;
-		int ID = ijson["ID"].get<int>();
-		std::string name = ijson["Name"].get<std::string>();
-		int piece = ijson["Piece"].get<int>();
-		PIECE pieceF = static_cast<PIECE>(piece);
-		int maxSlot = ijson["maxSlot"].get<int>();
+		int ID = json["ID"].get<int>();
+		std::string name = json["Name"].get<std::string>();
+		PIECE piece = json["Piece"].get<PIECE>();
+		int maxSlot = json["maxSlot"].get<int>();
 		statistic stat = gjs::genStat(ID, listObjFile[1]);
-		int lvlMin = ijson["lvlMin"].get<int>();
-		stuff stuff_(ID, name, maxSlot, pieceF, lvlMin, stat);
-		int nbEnchant = ijson["nbEnchant"].get<int>();
-		nlohmann::json ejson = ijson["enchant"].get<nlohmann::json>();
-		for (int i = 0; i < nbEnchant; i++) {
-			enchant enchant_ = gjs::genEnchant(ejson, listObjFile[2]);
-			stuff_.addEnchant(enchant_);
+		int lvlMin = json["lvlMin"].get<int>();
+		stuff stuff_(ID, name, maxSlot, piece, lvlMin, stat);
+
+		auto enchant_it = json.find("Enchant");
+		if (enchant_it != json.end()) {
+			for (auto& enchant_it_ : *enchant_it) {
+				enchant enchant_ = gjs::genEnchant(enchant_it_, listObjFile[2]);
+				stuff_.addEnchant(enchant_);
+			}
 		}
 		return stuff_;
 	}
@@ -101,10 +110,10 @@ namespace gjs {
 		return enchant_;
 	}
 
-	enchant genEnchant(nlohmann::json& ijson, ObjectFile statEnchante) {
+	enchant genEnchant(nlohmann::json& json, ObjectFile statEnchante) {
 		std::cout << "    -> Generation d'un enchante." << std::endl;
-		int ID = ijson["ID"].get<int>();
-		std::string name = ijson["Name"].get<std::string>();
+		int ID = json["ID"].get<int>();
+		std::string name = json["Name"].get<std::string>();
 		statistic stat = gjs::genStat(ID, statEnchante);
 		enchant enchant_(ID, name, stat);
 		return enchant_;
@@ -113,37 +122,38 @@ namespace gjs {
 	item genItem(nlohmann::json& ijson) {
 		std::cout << "    -> Generation d'un item." << std::endl;
 		int ID = ijson["ID"].get<int>();
+
 		std::string name = ijson["Name"].get<std::string>();
 		item item_(ID, name);
-		return item_;		
+		return item_;
 	}
 
-	void genItem(nlohmann::json& ijson, std::unique_ptr<sac>& sac_, std::vector<ObjectFile> listObjFile) {
+	void genItemSac(nlohmann::json& json, std::unique_ptr<sac>& sac_, std::vector<ObjectFile> listObjFile) {
 		std::cout << "  -> Generation d'un item pour le sac." << std::endl;
-		int type = ijson["Type"].get<int>();
-		sf::Vector2i pos(ijson["pos"]["X"].get<int>(), ijson["pos"]["Y"].get<int>());
+		int ID = json["ID"].get<int>();
+		int type = json["Type"].get<int>();
+		sf::Vector2i pos(json["pos"]["X"].get<int>(), json["pos"]["Y"].get<int>());
 		if (type == 0) {
-			enchant enchant_ = gjs::genEnchant(ijson, listObjFile[2]);
+			enchant enchant_ = gjs::genEnchant(json, listObjFile[2]);
 			sac_->addObject<enchant>(pos, enchant_);
 		}
 		else if (type == 1) {
-			stuff stuff_ = gjs::genStuff(ijson, listObjFile);
+			stuff stuff_ = gjs::genStuff(json, listObjFile);
 			sac_->addObject<stuff>(pos, stuff_);
 		}
 		else if (type == 2) {
-			int ID = ijson["ID"].get<int>();
-			sf::Vector2i size(ijson["Size"]["X"].get<int>(), ijson["Size"]["Y"].get<int>());
+			sf::Vector2i size(json["Size"]["X"].get<int>(), json["Size"]["Y"].get<int>());
 			std::unique_ptr<sac> sac__ = std::make_unique<sac>(ID, size);
 			sac_->addObject<sac>(pos, ID, size);
 		}
 		else if (type == 3) {
-			item item_ = gjs::genItem(ijson);
+			item item_ = gjs::genItem(json);
 			sac_->addObject<item>(pos, item_);
 		}
 	}
 
-	// TO DO fonction de stat
-	int pvMax(TYPEPERSO type) {
+	// TODO fonction de stat
+	int pvMax(TYPEPERSO type, int ) {
 		return 1;
 	}
 	int manaMax(TYPEPERSO type) {

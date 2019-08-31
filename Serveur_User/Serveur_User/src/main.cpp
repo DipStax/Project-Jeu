@@ -56,7 +56,7 @@ int main() {
 		std::cout << "Erreur lors de de l'ouverture de la base de donne 'Game': " << sqlite3_errmsg(db);
 	}
 	else {
-		std::cout << "La base de donne 'Game' est ouverte." << std::endl;
+		std::cout << "Verif table: 'Game' -> Done" << std::endl;
 	}
 
 	// User:
@@ -72,8 +72,8 @@ int main() {
 	}
 
 	// Perso
-	// ID || pseudo || ID compte || type
-	com = "CREATE TABLE IF NOT EXISTS perso ( 'ID' INTEGER PRIMARY KEY AUTOINCREMENT, 'pseudo' varchar(12) NOT NULL, 'ID compte' INTEGER NOT NULL, 'type' INTEGER NOT NULL);";
+	// ID || pseudo || ID compte
+	com = "CREATE TABLE IF NOT EXISTS perso ( 'ID' INTEGER PRIMARY KEY AUTOINCREMENT, 'pseudo' varchar(12) NOT NULL, 'ID compte' INTEGER NOT NULL);";
 	std::cout << com << std::endl;
 	verif = sqlite3_exec(db, com.c_str(), csu::callback, 0, &errMsg);
 	if (verif) {
@@ -122,7 +122,7 @@ int main() {
 						// enregistre le perso dans le Json et dans la BDD
 						// envoie le personnage au serveur world 
 						gpg::addMinStuff(perso, adrsIP);
-						gpg::savePerso(perso, IDcompte);
+						gpg::savePerso(perso, IDcompte, db);
 					}
 				}
 				if (direction[2] == 2) { // 1.2.2

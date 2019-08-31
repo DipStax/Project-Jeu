@@ -60,6 +60,19 @@ void stuff::inPacket(sf::Packet& packet) {
 	}
 }
 
+void stuff::inJson(nlohmann::json& json) {
+	json["ID"] = m_ID;
+	json["TypeObj"] = m_typeObj;
+	json["Name"] = m_name;
+	json["Piece"] = m_piece;
+	json["Niveau min"] = m_lvlMin;
+	for (auto& enchant_ : m_enchant) {
+		nlohmann::json jsonObject = nlohmann::json::object();
+		jsonObject << enchant_;
+		json["enchant"].push_back(jsonObject);
+	}
+}
+
 sf::Packet& operator<<(sf::Packet& packet, stuff& stuff_) {
 	std::cout << "<---------->" << std::endl << "Packet << Stuff" << std::endl;
 	std::cout << stuff_.getID() << std::endl;
@@ -92,6 +105,11 @@ sf::Packet& operator>>(sf::Packet& packet, stuff& stuff_) {
 std::ostream& operator<<(std::ostream& os, stuff& stuff_) {
 	stuff_.write();
 	return os;
+}
+
+nlohmann::json& operator<<(nlohmann::json& json, stuff& stuff_) {
+	stuff_.inJson(json);
+	return json;
 }
 
 void stuff::write() {

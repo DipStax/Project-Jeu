@@ -2,7 +2,7 @@
 
 Perso::Perso() {}
 
-Perso::Perso(int ID, std::string pseudo, short map, sf::Vector2f pos, short lvl, int expAct, TYPEPERSO type, 
+Perso::Perso(int ID, std::string pseudo, short map, sf::Vector3f pos, short lvl, int expAct, TYPEPERSO type, 
 			 int argentBrute, int manaAct, int vieAct, hair::clr hair, skin::clr skin) {
 	m_ID = ID;
 	m_type = type;
@@ -26,7 +26,7 @@ int Perso::getID() const { return m_ID; }
 std::string Perso::getPseudo() const { return m_pseudo; }
 short Perso::getType() const { return m_type; }
 short Perso::getMap() const { return m_mapAct; }
-sf::Vector2f Perso::getPos() const { return m_pos; }
+sf::Vector3f Perso::getPos() const { return m_pos; }
 short Perso::getLevel() const { return m_lvl; }
 int Perso::getExpAct() const { return m_expAct; }
 int Perso::getArgent() const { return m_argentBrute; }
@@ -43,8 +43,8 @@ void Perso::setName(std::string name) {
 	m_pseudo = name;
 }
 
-void Perso::setPos(float x, float y) {
-	m_pos = sf::Vector2f(x, y);
+void Perso::setPos(float x, float y, float z) {
+	m_pos = sf::Vector3f(x, y, z);
 }
 
 void Perso::clearStuff() {
@@ -98,7 +98,7 @@ void Perso::sacInPacket(sf::Packet& packet) {
 
 sf::Packet& operator<<(sf::Packet& packet, std::unique_ptr<Perso>& perso) {
 	packet << (sf::Uint32)perso->getID() << perso->getPseudo() << (sf::Int8)perso->getMap() << (sf::Uint16)perso->getPos().x
-		<< (sf::Uint16)perso->getPos().y << (sf::Uint8)perso->getType() << perso->getStat() << (sf::Uint8)perso->getLevel()
+		<< (sf::Uint16)perso->getPos().y << (sf::Uint16)perso->getPos().z << (sf::Uint8)perso->getType() << perso->getStat() << (sf::Uint8)perso->getLevel()
 		<< (sf::Uint32)perso->getExpAct() << (sf::Uint32)perso->getArgent() << (sf::Uint16)perso->getManaAct() << (sf::Uint16)perso->getVieAct()
 		<< static_cast<sf::Uint8>(perso->getClrHair()) << static_cast<sf::Uint8>(perso->getClrSkin());
 	packet << (sf::Uint8)perso->getNbStuff();
@@ -127,6 +127,11 @@ std::ostream& operator<<(std::ostream &os, std::unique_ptr<Perso>& perso) {
 	return os;
 }
 
+nlohmann::json& operator<<(nlohmann::json& json, std::unique_ptr<Perso>& perso) {
+	perso->jsonWrite(json);
+	return json;
+}
+
 void Perso::write() {
 	std::cout << "Name: " << m_pseudo << std::endl;
 	std::cout << "ID: " << m_ID << std::endl;
@@ -153,4 +158,30 @@ void Perso::sacOutPacket(sf::Packet& packet) {
 		std::unique_ptr<sac> sac_ = std::make_unique<sac>(ID, size);
 		packet >> *sac_;
 	}
+}
+
+void Perso::jsonWrite(nlohmann::json& json) {
+	json["ID"] = m_ID;
+	json["Type"] = m_type;
+	json["Couleur"]["Cheveux"] = m_clrHair;
+	json["Couleur"]["Peau"] = m_clrSkin;
+	json["Pseudo"] = m_pseudo;
+	json["Niveau"] = m_lvl;
+	json["Exp Actuelle"] = m_expAct;
+	json["Argent brute"] = m_argentBrute;
+	json["World"]["Map"] = m_mapAct;
+	json["World"]["Position x"] = m_pos.x;
+	json["World"]["Position y"] = m_pos.y;
+	json["World"]["Position z"] = m_pos.z;
+	for (auto& stuff_ : m_stuff) {
+		nlohmann::json jsonObject = nlohmann::json::object();
+		jsonObject << stuff_.second;
+		json["Stuff"].push_back(jsonObject);
+	}
+	for (auto& sac_ : m_sac) {
+		nlohmann::json jsonObject = nlohmann::json::object();
+		sac_->inJson(jsonObject);
+		json["Sac"].push_back(jsonObject);
+	}
+
 }

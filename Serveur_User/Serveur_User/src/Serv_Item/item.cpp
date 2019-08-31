@@ -30,6 +30,12 @@ void item::inPacket(sf::Packet& packet) {
 	packet << (sf::Uint32)m_ID << m_name << (sf::Uint8)m_typeObj;
 }
 
+void item::inJson(nlohmann::json& json) {
+	json["ID"] = m_ID;
+	json["TypeObj"] = m_typeObj;
+	json["Name"] = m_name;
+}
+
 sf::Packet& operator<<(sf::Packet& packet, item& item_) {
 	packet << (sf::Uint32)item_.getID() << item_.getName() << static_cast<sf::Uint8>(item_.getTypeObj());
 	return packet;
@@ -48,6 +54,13 @@ sf::Packet& operator>>(sf::Packet& packet, item& item) {
 std::ostream& operator<<(std::ostream &os, item& item_) {
 	item_.write();
 	return os;
+}
+
+nlohmann::json& operator<<(nlohmann::json& json, item& item_) {
+	json["ID"] = item_.getID();
+	json["TypeObj"] = item_.getTypeObj();
+	json["Name"] = item_.getName();
+	return json;
 }
 
 void item::write() {
