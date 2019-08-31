@@ -4,9 +4,7 @@
 template<class T, class... Args>
 bool sac::addObject(sf::Vector2i pos, Args&&... args) {
 	if (!this->isFull() && !this->posUse(pos)) {
-		m_item.emplace_back(std::make_unique<T>(std::forward<Args>(args)...));
-		m_posItem.emplace_back(pos);
-		m_nbItem++;
+		m_item[pos] = std::make_unique<T>(std::forward<Args>(args)...);
 		return true;
 	}
 	return false;
@@ -15,8 +13,8 @@ bool sac::addObject(sf::Vector2i pos, Args&&... args) {
 template<class T, class... Args>
 bool sac::addObject(Args&&... args) {
 	if (!this->isFull()) {
-		m_item.emplace_back(std::make_unique<T>(std::forward<Args>(args)...));
-		m_nbItem++;
+		sf::Vector2i pos = this->posNUseFirst();
+		m_item[pos] = std::make_unique<T>(std::forward<Args>(args)...);
 		return true;
 	}
 	return false;

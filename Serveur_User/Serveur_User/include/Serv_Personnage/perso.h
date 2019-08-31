@@ -4,30 +4,32 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <SFML/Network/Packet.hpp>
+
 #include <iostream>
+#include <iomanip>
 
 #include <Serv_Personnage/Stat.h>
-
 #include <Serv_Item/item.h>
 #include <Serv_Item/stuff.h> 
 #include <Serv_Item/sac.h>
 
-#include <iomanip>
-
 enum TYPEPERSO { TANK, EPEE, MAGE, PERSO };
 enum dir { U, D, R, L, UR, RL, DU, DL };
+
 namespace skin {
 	enum clr { Blanc, MaronC, MaronF, Beige, Rose, Jaune };
 }
+
 namespace hair {
 	enum clr { Blanc, Gris, Maron, Rouge, Ornage, Jaune };
 }
+
 enum colorZone { SKIN, HAIR };
 
 class Perso {
 public:
 	Perso();
-	Perso(int ID, std::string pseudo, short map, sf::Vector2f pos, short lvl, int expAct, TYPEPERSO type, 
+	Perso(int ID, std::string pseudo, short map, sf::Vector3f pos, short lvl, int expAct, TYPEPERSO type, 
 		  int argentBrute, int manaAct, int vieAct, hair::clr hair, skin::clr skin);
 	~Perso();
 
@@ -35,7 +37,7 @@ public:
 	std::string getPseudo() const;
 	short getType() const;
 	short getMap() const;
-	sf::Vector2f getPos() const;
+	sf::Vector3f getPos() const;
 	short getLevel() const;
 	int getExpAct() const;
 	int getArgent() const;
@@ -49,7 +51,7 @@ public:
 	hair::clr getClrHair() const;
 
 	void setName(std::string name);
-	void setPos(float x, float y);
+	void setPos(float x, float y, float z);
 	void clearStuff();
 
 	void changeColor(skin::clr color);
@@ -66,12 +68,14 @@ public:
 	friend sf::Packet& operator<<(sf::Packet& packet, std::unique_ptr<Perso>& perso);
 	friend sf::Packet& operator>>(sf::Packet& packet, std::unique_ptr<Perso>& perso);
 	friend std::ostream& operator<<(std::ostream &os, std::unique_ptr<Perso>& perso);
+	friend nlohmann::json& operator<<(nlohmann::json& json, std::unique_ptr<Perso>& perso);
 protected:
 	void write();
+	void jsonWrite(nlohmann::json& json);
 	std::string m_pseudo;
 	short m_lvl, m_mapAct;
-	sf::Vector2f m_pos;
 	statistic m_stat;
+	sf::Vector3f m_pos;
 	int m_nbStuff, m_nbSac;
 	int m_manaAct, m_vieAct;
 	int m_manaMax, m_vieMax;
