@@ -116,15 +116,18 @@ int main() {
 				}
 				if (adrs_tmp == 5) {
 					mCompte::persoVerif(perso, adrs_tmp, accID, adrsIP, servReceive, servSend, listener);
-					if (adrs_tmp == 51) {
+					if (adrs_tmp == 53) {
 						adrs = 0;
 						mCompte = false;
 						game = true;
 						// TODO
-						// tout clear
+						// tout clear sauf perso
 						// mettre en place la com serv_worl <-> client
 					}
-					else {
+					else if (adrs_tmp == 52) {
+						// TODO affchage message nb perso > 2
+					}
+					else if (adrs_tmp == 51) {
 						sf::Text txt;
 						txt.setFont(fontRobotRegular);
 						txt.setCharacterSize(15);

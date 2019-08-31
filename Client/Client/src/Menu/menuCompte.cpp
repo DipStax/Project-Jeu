@@ -176,14 +176,19 @@ namespace mCompte {
 
 	void persoVerif(std::unique_ptr<Perso>& perso, short& adrs_tmp, int IDCompte, std::string adrsIP,
 					sf::TcpSocket& socketServ, sf::TcpSocket& servReceive, sf::TcpListener& listener) {
+		std::string code;
 		cts::persoVerif(perso, IDCompte, adrsIP, socketServ);
-		bool verif = stc::getPersoVerfi(servReceive, listener);
-		if (verif) {
+		stc::getPersoVerif(servReceive, listener, code);
+		if (code == "1.2.1.3") {
 			stc::receiveMinStuff(perso, servReceive, listener);
-			adrs_tmp = 51;
-			return;
+			adrs_tmp = 53;
 		}
-		adrs_tmp = 52;
+		else if (code == "1.2.1.2") {
+			adrs_tmp = 52;
+		}
+		else if (code == "1.2.1.1") {
+			adrs_tmp = 51;
+		}
 	}
 
 	void genPersoDemo(std::unique_ptr<Perso>& perso, std::array<int, 5> creaPerso) {
