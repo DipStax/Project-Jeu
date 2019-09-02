@@ -34,7 +34,8 @@ private:
 	sf::Vector2i posNUseFirst();
 	sf::Vector2i m_size;
 	int m_sizeTotal;
-	std::map<sf::Vector2i, std::unique_ptr<item>> m_item;
+	std::vector<sf::Vector2i> m_pos;
+	std::vector<std::unique_ptr<item>> m_item;
 };
 
 #include <Serv_Item/sac.inl>
