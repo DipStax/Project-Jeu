@@ -153,10 +153,10 @@ namespace gjs {
 	}
 
 	// TODO fonction de stat
-	int pvMax(TYPEPERSO type, int ) {
+	int pvMax(TYPEPERSO type, int lvl) {
 		return 1;
 	}
-	int manaMax(TYPEPERSO type) {
+	int manaMax(TYPEPERSO type, int lvl) {
 		return 1;
 	}
 

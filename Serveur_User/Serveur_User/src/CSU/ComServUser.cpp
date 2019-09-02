@@ -128,16 +128,7 @@ namespace csu {
 				return;
 			}
 			socket.send(packetServ);
-			std::cout << "Envoie au client (" << adrsIP << ") du code: " << dir_serveur << std::endl;
-			std::string accFile = "bin/Compte/" + std::to_string(ID) + ".json";
-			std::ofstream file(accFile.c_str());
-			nlohmann::json json = {
-				{ "ID compte", ID },
-				{ "Identifiant", pseudo },
-				{ "nb Perso", 0 },
-			};
-			file << json << std::endl;
-			return;
+			std::cout << "Envoie au client (" << adrsIP << ") du code: " << dir_serveur << std::endl;			return;
 		}
 		std::cout << "Plusieur correspondance trouve." << std::endl;
 		packetServ << dir_serveur;
@@ -191,9 +182,9 @@ namespace csu {
 		hair::clr colorHairF = static_cast<hair::clr>(colorHair);
 		skin::clr colorSkinF = static_cast<skin::clr>(colorSkin);
 		switch (typeF) {
-		case PERSO:
-			perso = std::make_unique<Perso>(ID, pseudo, map, pos, lvl, expAct, typeF, argentBrute, manaAct, vieAct, colorHairF, colorSkinF);
-			break;
+			case PERSO:
+				perso = std::make_unique<Perso>(ID, pseudo, map, pos, lvl, expAct, typeF, argentBrute, manaAct, vieAct, colorHairF, colorSkinF);
+				break;
 		//case TANK:
 		//case EPEE:
 		//case MAGE:
