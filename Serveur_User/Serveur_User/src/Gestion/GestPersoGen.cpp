@@ -40,7 +40,7 @@ namespace gpg {
 		std::string dir = "1.2.3.1";
 		packet << dir;
 		std::vector<stuff> listStuff = gpg::genStuffMax(type);
-		packet << listStuff.size();
+		packet << (sf::Uint8)listStuff.size();
 		for (auto& stuff_ : listStuff) {
 			std::cout << stuff_;
 			packet << stuff_;
