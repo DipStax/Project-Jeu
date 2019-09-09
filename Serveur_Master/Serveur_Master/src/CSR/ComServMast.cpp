@@ -32,7 +32,6 @@ namespace cms {
 	
 	void sendToUserDB(sf::Packet& packetClient, sf::IpAddress adrsIP) {
 		sf::TcpSocket serverUser;
-		packetClient << adrsIP.toString();
 		sf::Socket::Status status = serverUser.connect("127.0.0.1", USERSERVSO);
 		if (status != sf::Socket::Done) {
 			std::cout << "Envoie au serveur USERDB: echoue." << std::endl;

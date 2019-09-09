@@ -29,6 +29,7 @@ namespace gpg {
 		// json << perso;
 
 		// enregistre dans la base de donnée Game table 'perso'
+		std::cout << "savePerso DONE" << std::endl;
 	}
 
 	void sendMaxStuff(sf::Packet& packet) {
@@ -40,7 +41,7 @@ namespace gpg {
 		std::string dir = "1.2.3.1";
 		packet << dir;
 		std::vector<stuff> listStuff = gpg::genStuffMax(type);
-		packet << listStuff.size();
+		packet << (sf::Uint8)listStuff.size();
 		for (auto& stuff_ : listStuff) {
 			std::cout << stuff_;
 			packet << stuff_;

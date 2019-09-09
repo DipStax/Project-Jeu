@@ -113,8 +113,8 @@ void Perso::rdTxtrDraw(sf::RenderTexture& rdTxtr) {
 
 sf::Packet& operator<<(sf::Packet& packet, std::unique_ptr<Perso>& perso) {
 	packet << (sf::Uint32)perso->getID() << perso->getPseudo() << (sf::Int8)perso->getMap() << (sf::Uint16)perso->getPos().x
-		<< (sf::Uint16)perso->getPos().y << (sf::Uint8)perso->getType() << perso->getStat() << (sf::Uint8)perso->getLevel()
-		<< (sf::Uint32)perso->getExpAct() << (sf::Uint32)perso->getArgent() << (sf::Uint16)perso->getManaAct() << (sf::Uint16)perso->getVieAct()
+		<< (sf::Uint16)perso->getPos().y << 0 /* pos.z */<< (sf::Uint8)perso->getType() << perso->getStat() << (sf::Uint8)perso->getLevel()
+		<< 0 /*(sf::Uint32)perso->getExpAct()*/ << (sf::Uint32)perso->getArgent() << (sf::Uint16)perso->getManaAct() << (sf::Uint16)perso->getVieAct()
 		<< static_cast<sf::Uint8>(perso->getClrHair()) << static_cast<sf::Uint8>(perso->getClrSkin());
 	packet << (sf::Uint8)perso->getNbStuff();
 	for (auto& stuff_ : perso->getStuff()) {
@@ -204,7 +204,7 @@ void Perso::setSprite() {
 	rdTxtr.draw(m_sptPerso);
 	std::cout << m_stuff.size();
 	std::vector<sf::Texture> txtr_tmp;
-	std::vector< sf::Sprite> spt_tmp;
+	std::vector<sf::Sprite> spt_tmp;
 	for (auto& stuff_ : m_stuff) {
 		txtr_tmp.push_back(stuff_.second.getTxtr());
 		spt_tmp.emplace_back(txtr_tmp.back());

@@ -52,7 +52,7 @@ namespace cts {
 		std::string direction = "1.2.1";
 		sf::Packet packet;
 		perso->clearStuff();
-		packet << direction << IDCompte << perso << adrsIP;
+		packet << direction << (sf::Uint32)IDCompte << perso << adrsIP;
 		socketServ.connect(IPSERV, SOSERV);
 		socketServ.send(packet);
 	}
