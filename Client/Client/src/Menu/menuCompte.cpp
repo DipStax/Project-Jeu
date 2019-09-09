@@ -178,6 +178,7 @@ namespace mCompte {
 					sf::TcpSocket& socketServ, sf::TcpSocket& servReceive, sf::TcpListener& listener) {
 		std::string code;
 		cts::persoVerif(perso, IDCompte, adrsIP, socketServ);
+		// ERROR perso : empty
 		stc::getPersoVerif(servReceive, listener, code);
 		if (code == "1.2.1.3") {
 			stc::receiveMinStuff(perso, servReceive, listener);
