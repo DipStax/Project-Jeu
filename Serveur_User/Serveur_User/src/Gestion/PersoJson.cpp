@@ -1,12 +1,5 @@
 #include <Gestion/PersoJson.h>
 
-/***********************************************\
-||                                             ||
-||      A REFAIRE ENTIEREMENT EN FONCTION      ||
-||            DU NOUVEAU MODELE JSON           ||
-||                                             ||
-\***********************************************/
-
 namespace gjs {
 	void genListPerso(std::vector<std::unique_ptr<Perso>>& listPerso, int ID, std::vector<ObjectFile> listObjFile) {
 		std::cout << "Generation de la liste de personnage du compte." << std::endl;
@@ -26,11 +19,6 @@ namespace gjs {
 					perso->forceStuff(stuff_);
 				}
 			}
-
-
-
-
-
 			auto sac_it = json.find("Sac");
 			if (sac_it != json.end()) {
 				for (auto& sac_it_ : *sac_it) {
@@ -153,10 +141,10 @@ namespace gjs {
 	}
 
 	// TODO fonction de stat
-	int pvMax(TYPEPERSO type, int ) {
+	int pvMax(TYPEPERSO type, int lvl) {
 		return 1;
 	}
-	int manaMax(TYPEPERSO type) {
+	int manaMax(TYPEPERSO type, int lvl) {
 		return 1;
 	}
 

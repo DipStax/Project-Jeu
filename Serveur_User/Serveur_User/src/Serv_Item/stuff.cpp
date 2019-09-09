@@ -69,7 +69,7 @@ void stuff::inJson(nlohmann::json& json) {
 	for (auto& enchant_ : m_enchant) {
 		nlohmann::json jsonObject = nlohmann::json::object();
 		jsonObject << enchant_;
-		json["enchant"].push_back(jsonObject);
+		json["enchant"] = jsonObject;
 	}
 }
 
