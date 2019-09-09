@@ -21,7 +21,8 @@ bool sac::isFull() {
 }
 
 bool sac::posUse(sf::Vector2i pos) {
-	auto iterator = m_item.find(pos);
+	int pos_ = transPos(pos);
+	auto iterator = m_item.find(pos_);
 	if (iterator == m_item.end()) {
 		return false;
 	}
@@ -38,10 +39,11 @@ void sac::inJson(nlohmann::json& json) {
 	json["TypeObj"] = m_typeObj;
 	json["Size x"] = m_size.x;
 	json["Size y"] = m_size.y;
-	for (auto& item_ : m_item) {
+	for (int i = 0; i < m_item.size(); i++) {
 		nlohmann::json jsonObject;
-		jsonObject["Position x"] = item_.first.x;
-		jsonObject["Position y"] = item_.first.y;
+		sf::Vector2i pos = this->transPos(item_.first);
+		jsonObject["Position x"] = pos.x;
+		jsonObject["Position y"] = pos.y;
 		item_.second->inJson(jsonObject);
 		json["Contenu"].push_back(jsonObject);
 	}
@@ -106,26 +108,30 @@ nlohmann::json& operator<<(nlohmann::json& json, sac& sac_) {
 void sac::itemInPacket(sf::Packet& packet) {
 	for (auto& item_ : m_item) {
 		item_.second->inPacket(packet);
-		packet << (sf::Uint8)item_.first.x << (sf::Uint8)item_.first.y;
+		sf::Vector2i pos = this->transPos(item_.first);
+		packet << (sf::Uint8)pos.x << (sf::Uint8)pos.y;
 	}
 }
 
 sf::Vector2i sac::posNUseFirst() {
-	sf::Vector2i pos(m_item.begin()->first.x, m_item.begin()->first.y);
-	if (pos.x == 0 && pos.y == 0) {/*
-		for (int y = 0; y < m_size.y; y++) {
-			for (int x = 0; x < m_size.x; x++) {
-				sf::Vector2i pos_(x, y);
-				if (!this->posUse(pos_)) {
-					return pos_;
-				}
+	if (m_item.begin()->first == 0) {
+		int i = 0;
+		for (auto& item_:m_item) {
+			if (item_.first > i) {
+				this->transPos(item_.first);
 			}
-		}*/
-	}	
-	else {
-		pos.x = 0;
-		pos.y = 0;
-		return pos;
+			i++;
+		}
 	}
-	
+	return sf::Vector2i(0,0);
+}
+
+sf::Vector2i sac::transPos(int intPos) {
+	int y = intPos % m_size.x;
+	int x = (intPos - y) / m_size.x;
+	return sf::Vector2i(x, y);
+}
+ 
+int sac::transPos(sf::Vector2i vecPos) {
+	return vecPos.x * m_size.x + vecPos.y;
 }

@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <map>
 #include <Serv_Item/item.h>
 #include <Serv_Item/enchant.h>
 #include <Serv_Item/stuff.h>
@@ -32,9 +33,11 @@ public:
 private:
 	void itemInPacket(sf::Packet& packet);
 	sf::Vector2i posNUseFirst();
+	sf::Vector2i transPos(int intPos);
+	int transPos(sf::Vector2i vecPos);
 	sf::Vector2i m_size;
 	int m_sizeTotal;
-	std::map<sf::Vector2i, std::unique_ptr<item>> m_item;
+	std::map<int, std::shared_ptr<item>> m_item;
 };
 
 #include <Serv_Item/sac.inl>
