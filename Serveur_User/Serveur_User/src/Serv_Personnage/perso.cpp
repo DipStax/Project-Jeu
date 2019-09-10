@@ -174,14 +174,14 @@ void Perso::jsonWrite(nlohmann::json& json) {
 	json["World"]["Position y"] = m_pos.y;
 	json["World"]["Position z"] = m_pos.z;
 	for (auto& stuff_ : m_stuff) {
-		nlohmann::json jsonObject;
+		nlohmann::json jsonObject = nlohmann::json::object();
 		jsonObject << stuff_.second;
-		json["Stuff"] = jsonObject;
+		json["Stuff"].push_back(jsonObject);
 	}
 	for (auto& sac_ : m_sac) {
-		nlohmann::json jsonObject;
+		nlohmann::json jsonObject = nlohmann::json::object();
 		sac_->inJson(jsonObject);
-		json["Sac"] = jsonObject;
+		json["Sac"].push_back(jsonObject);
 	}
 
 }
